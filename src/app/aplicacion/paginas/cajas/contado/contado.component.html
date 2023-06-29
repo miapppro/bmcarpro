@@ -1,0 +1,134 @@
+<!-- TITULO -->
+<div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+    <div fxLayout="row">
+        <button mat-button>
+            <mat-icon>point_of_sale</mat-icon> Pagar al Contado
+        </button>
+    </div>
+    <div fxLayout="row"></div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <button mat-mini-fab (click)="buscar()" matTooltip="Nuevo (F2)">
+            <mat-icon>update</mat-icon>
+        </button>
+    </div>
+</div>
+
+
+<mat-divider></mat-divider>
+
+<!-- FORM -->
+<form *ngIf="buscadorFormGroup" [formGroup]="buscadorFormGroup" (ngSubmit)="buscar()" #aForm>
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+        <div fxFlex="30%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>search</mat-icon> Buscar
+                </mat-label>
+                <input matInput autocomplete="off" placeholder="Buscar..." name="buscador" formControlName="buscador"
+                    type="text">
+            </mat-form-field>
+        </div>
+
+        <div fxFlex="20%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>reorder</mat-icon> Limite
+                </mat-label>
+                <input matInput placeholder="Limite" formControlName="limite" type="number">
+            </mat-form-field>
+        </div>
+        <div fxFlex="20%">
+            <ng-select placeholder="Selecciona una Sucursal" formControlName="sucursal" class="w-100"
+                [clearable]="false" (change)="buscar()">
+                <ng-option [value]="0">
+                    TODOS
+                </ng-option>
+                <ng-option *ngFor="let item of sucursales" [value]="item._id">
+                    {{item.codigo}} - {{item.descripcion}}
+                </ng-option>
+            </ng-select>
+        </div>
+        <div fxFlex="20%">
+            <mat-form-field>
+                <mat-label>
+                    <mat-icon>search</mat-icon> Buscar
+                </mat-label>
+                <input type="search" matInput (keyup)="aplicarFiltro($event)" placeholder="buscar..">
+            </mat-form-field>
+        </div>
+        <div fxFlex="10%" fxLayoutAlign="end center">
+            <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+                <mat-icon>search</mat-icon> Buscar
+            </button>
+        </div>
+    </div>
+</form>
+
+<mat-divider></mat-divider>
+
+<!-- TABLA -->
+<div class="tabla-contenedor mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort class="w-100">
+
+        <!--  -->
+        <ng-container matColumnDef="codigo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 30%">VENTA</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon color="{{element.activo? 'primary' : 'warn'}}">
+                    {{element.activo? 'done' : 'close'}}
+                </mat-icon>
+                {{element.codigo}} <br>
+                {{element.Sucursal.descripcion}} - {{element.Almacen.descripcion}}
+            </td>
+        </ng-container>
+
+        <!--  -->
+        <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 40%">CLIENTE</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.Cliente.ci}} - {{element.Cliente.razon}} <br>
+                {{element.registro | date:'EEEE dd LLLL yyyy hh:mm:ss a'}}
+            </td>
+        </ng-container>
+
+        <!--  -->
+        <ng-container matColumnDef="pagado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">PAGADO</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon color="{{element.pagado? 'primary' : 'warn'}}">
+                    {{element.pagado? 'done' : 'close'}}
+                </mat-icon>
+            </td>
+        </ng-container>
+
+        <!--  -->
+        <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%; text-align: end;">TOTAL</th>
+            <td mat-cell *matCellDef="let element" style="text-align: right;">
+                {{element.total | number:'1.2-2'}}
+            </td>
+        </ng-container>
+
+        <!-- OPCIONES -->
+        <ng-container matColumnDef="opciones">
+            <th mat-header-cell *matHeaderCellDef style="width: 10%; text-align: right;"></th>
+            <td mat-cell *matCellDef="let element" style="text-align: right;">
+                <button *ngIf="element.aprobado && element.pagado==false" mat-raised-button color="accent"
+                    (click)="cobrar(element)">
+                    <mat-icon>attach_money</mat-icon> Pagar
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (dblclick)="cobrar(row)"
+            (mouseenter)="row.isActive=true" (mouseleave)="row.isActive=false">
+        </tr>
+    </table>
+
+</div>
+
+<!-- PAGINADOR-->
+<mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 30, 40, 50, 100, 200]" showFirstLastButtons
+    class="mat-elevation-z8">
+</mat-paginator>

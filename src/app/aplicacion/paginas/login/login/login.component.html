@@ -1,0 +1,52 @@
+<!-- <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar> -->
+<div class="fondo">
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="end" data-wow-delay="0.5s">
+        <div fxFlex="30%">
+        </div>
+        <div fxFlex="40%">
+
+            <div style="text-align: center; opacity:initial;">
+                <div>
+                    <img src="assets/imagenes/logo/logo_500.png" alt="" style="width: 60%; height: auto">
+                </div>
+            </div>
+            <div style="min-height: 100px;"></div>
+            <span class="titulo">BM CAR</span>
+            <mat-card class="mat-elevation-z12" style="background: transparent;">
+                <form [formGroup]="registroFormGroup" (ngSubmit)="onSubmit()">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Usuario</mat-label>
+                        <input matInput placeholder="Usuario" formControlName="username" #cursor
+                            autocomplete="off" required>
+                        <mat-icon matSuffix>how_to_reg</mat-icon>
+                        <mat-error *ngIf="registroControl && r.username.errors">
+                            <mat-error *ngIf="r.username.errors.required">Por favor introduzca su Usuario</mat-error>
+                            <mat-error *ngIf="r.username.errors.minlength">debe tener al menos 3 caracteres</mat-error>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Clave</mat-label>
+                        <input matInput type="password" placeholder="Clave" formControlName="password"
+                            autocomplete="off" required>
+                        <mat-icon matSuffix>vpn_key</mat-icon>
+                        <mat-error *ngIf="registroControl && r.password.errors">
+                            <mat-error *ngIf="r.password.errors.required">Por favor introduzca su Clave</mat-error>
+                            <mat-error *ngIf="r.password.errors.minlength">debe tener al menos 3 caracteres</mat-error>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <div style="text-align:center">
+                        <div>
+                            <button mat-raised-button color="primary" matTooltip="Ingresar">
+                                <mat-icon>done</mat-icon> Ingresar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </mat-card>
+        </div>
+        <div fxFlex="30%">
+        </div>
+    </div>
+</div>

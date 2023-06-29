@@ -1,0 +1,85 @@
+<!-- TITULO -->
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="50%">
+        <button mat-button>
+            <mat-icon>toc</mat-icon> Detalle de Arqueo
+        </button>
+    </div>
+    <div fxFlex="50%">
+        <form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="cambiar()">
+            <ng-select placeholder="Selecciona un Arqueo" (change)="cambiar()" formControlName="idArqueo"
+                [required]="true" class="w-100" [clearable]="false">
+                <ng-option *ngFor="let item of arqueos" [value]="item._id">
+                    <span>
+                        {{item.codigo}} - {{item.numero}} : {{item.descripcion}}
+                    </span>
+                </ng-option>
+            </ng-select>
+        </form>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div id="print-section" *ngIf="arqueoSeleccionado">
+    <table class="w-100">
+        <thead>
+            <tr>
+                <th>{{arqueoSeleccionado.codigo}}</th>
+                <th colspan="6" style="text-align: center;">ARQUEO POR PRODUCTO</th>
+            </tr>
+            <tr>
+                <th>{{arqueoSeleccionado.numero}}</th>
+                <th colspan="2">{{arqueoSeleccionado.Sucursal.descripcion}}</th>
+                <th colspan="4">
+                    {{arqueoSeleccionado.inicioOficial | date:'EEEE dd LLLL yyyy hh:mm:ss'}}
+
+                    -
+                    
+                    {{arqueoSeleccionado.finOficial | date:'EEEE dd LLLL yyyy hh:mm:ss'}}
+                </th>
+            </tr>
+            <tr>
+                <th>Nº</th>
+                <th>Codigo</th>
+                <th>Codigo Pro</th>
+                <th>Descripcion</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>SubTotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of productos ; index as i">
+                <td data-column="Nº">{{i+1}}</td>
+                <td>{{item.produ.codigo}}</td>
+                <td>{{item.produ.codigoProveedor}}</td>
+                <td>{{item.produ.descripcion}}</td>
+                <td style="text-align: center;">{{item.venta.cantidad}}</td>
+                <td style="text-align: right;">{{item.venta.precioVenta | number:'1.2-2'}}</td>
+                <td style="text-align: right;">{{item.venta.subTotal | number:'1.2-2'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="6" style="text-align: end;">TOTAL</th>
+                <th style="text-align: right; font-size: 25px;">{{totalProductos | number:'1.2-2'}}</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="10%">
+        <button mat-raised-button styleSheetFile="/assets/css/arqueo-venta.scss" printSectionId="print-section"
+            color="primary" ngxPrint>
+            <mat-icon>print</mat-icon> Imprimir
+        </button>
+    </div>
+    <div fxFlex="70%">
+
+    </div>
+    <div fxFlex="20%" fxLayoutAlign="end center">
+
+    </div>
+</div>

@@ -1,0 +1,146 @@
+<!-- TITULO -->
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="50%">
+        <button mat-button>
+            <mat-icon>toc</mat-icon> Detalle de Arqueo
+        </button>
+    </div>
+    <div fxFlex="50%">
+        <form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="cambiar()">
+            <ng-select placeholder="Selecciona un Arqueo" (change)="cambiar()" formControlName="idArqueo"
+                [required]="true" class="w-100" [clearable]="false">
+                <ng-option *ngFor="let item of arqueos" [value]="item._id">
+                    <span>
+                        {{item.codigo}} - {{item.numero}} : {{item.descripcion}}
+                    </span>
+                </ng-option>
+            </ng-select>
+        </form>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+
+<div id="print-section" *ngIf="arqueoSeleccionado">
+
+
+
+    <div class="bg-primary" *ngIf="arqueoSeleccionado" style="text-align: center; font-size: 20px;">
+        DETALLE DE ARQUEO [{{arqueoSeleccionado.codigo}}]
+    </div>
+
+    <table class="w-100" *ngIf="arqueoSeleccionado">
+        <tbody>
+            <tr>
+                <td>{{arqueoSeleccionado.numero}}</td>
+                <td>{{arqueoSeleccionado.Sucursal.descripcion}} <br/> {{arqueoSeleccionado.Almacen.descripcion}}</td>
+                <td>{{arqueoSeleccionado.inicioOficial | date:'EEEE dd LLLL yyyy hh:mm:ss a'}} <br/> {{arqueoSeleccionado.finOficial  | date:'EEEE dd LLLL yyyy hh:mm:ss a'}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <table class="w-100">
+        <thead class="bg-primary">
+            <tr>
+                <th colspan="8" style="text-align: center; font-size: 20px;">CONTADOS</th>
+            </tr>
+            <tr>
+                <th style="width: 5%;">Nº</th>
+                <th style="width: 10%;">Codigo</th>
+                <th style="width: 10%;">Venta</th>
+                <th style="width: 10%;">Tipo</th>
+                <th style="width: 10%;">Total</th>
+                <th style="width: 10%;">Forma</th>
+                <th style="width: 10%;">Saldo</th>
+                <th style="width: 10%;">Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listaContados ; index as i">
+                <td>{{i+1}}</td>
+                <td>{{item.codigo}}</td>
+                <td>{{item.Venta.codigo}}</td>
+                <td>{{item.Venta.tipo}}</td>
+                <td style="text-align: right;">{{item.Venta.total | number:'1.2-2'}}</td>
+                <td style="text-align: right;">{{item.formaPago}}</td>
+                <td style="text-align: right;">{{item.Venta.totalSaldo | number:'1.2-2'}}</td>
+                <td style="text-align: right;">{{item.monto | number:'1.2-2'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="7">Total al Contado</th>
+                <th style="text-align: right; font-size: 25px;">{{totalContado | number:'1.2-2'}}</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <table class="w-100">
+        <thead>
+            <tr>
+                <th colspan="8" style="text-align: center; font-size: 20px;">CREDITOS</th>
+            </tr>
+            <tr>
+                <th style="width: 5%;">Nº</th>
+                <th style="width: 10%;">Codigo</th>
+                <th style="width: 10%;">Venta</th>
+                <th style="width: 10%;">Tipo</th>
+                <th style="width: 10%;">Total</th>
+                <th style="width: 10%;">Acumulado</th>
+                <th style="width: 10%;">Saldo</th>
+                <th style="width: 10%;">Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listaCreditos ; index as i">
+                <td>{{i+1}}</td>
+                <td>{{item.codigo}}</td>
+                <td>{{item.Venta.codigo}}</td>
+                <td>{{item.Venta.tipo}}</td>
+                <td style="text-align: right;">{{item.Venta.total | number:'1.2-2'}}</td>
+                <td style="text-align: right;">{{item.Venta.totalAcumulado | number:'1.2-2'}}</td>
+                <td style="text-align: right;">{{item.Venta.totalSaldo | number:'1.2-2'}}</td>
+                <td style="text-align: right;">{{item.monto | number:'1.2-2'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="7">Total al Credito</th>
+                <th style="text-align: right; font-size: 25px;">{{totalCredito | number:'1.2-2'}}</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="bg-primary" *ngIf="arqueoSeleccionado" style="text-align: end; font-size: 25px;">
+        TOTAL: {{total | number:'1.2-2'}}
+    </div>
+
+</div>
+
+<mat-divider></mat-divider>
+
+
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="10%">
+        <button *ngIf="arqueoSeleccionado && arqueoSeleccionado.aprobado" mat-raised-button (click)="descargar()"
+            color="primary">
+            <mat-icon>print</mat-icon> Imprimir Arqueo
+        </button>
+
+        <button mat-raised-button styleSheetFile="/assets/css/arqueo.scss" printSectionId="print-section"
+            color="primary" ngxPrint>
+            <mat-icon>print</mat-icon> Imprimir borrador...
+        </button>
+    </div>
+    <div fxFlex="70%">
+
+    </div>
+    <div fxFlex="20%" fxLayoutAlign="end center">
+        <button *ngIf="arqueoSeleccionado && arqueoSeleccionado.aprobado==false" mat-raised-button color="accent"
+            (click)="aprobar()">
+            <mat-icon>done_all</mat-icon> Aprobar y Finalizar Arqueo
+        </button>
+    </div>
+</div>

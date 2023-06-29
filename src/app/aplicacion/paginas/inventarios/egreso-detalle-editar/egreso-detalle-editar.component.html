@@ -1,0 +1,75 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">edit</mat-icon>
+            Detalle de Egreso
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+
+<!-- FORM -->
+<form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="onSubmit()">
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <div *ngIf="detalle" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+            <div fxFlex="50%">
+                Cantidad Ingreso: {{detalle.cantidadIngresoSaldo}}
+            </div>
+            <div fxFlex="50%">
+
+            </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>CANTIDAD</mat-label>
+            <input matInput autocomplete="off" placeholder="Cantidad" formControlName="cantidad" type="number"
+                [required]="true">
+            <mat-icon matSuffix>iso</mat-icon>
+            <mat-error *ngIf="registroControl && r.cantidad.errors">
+                <mat-error *ngIf="r.cantidad.errors.required">
+                    Se requiere la cantidad
+                </mat-error>
+                <mat-error *ngIf="r.cantidad.errors.min">
+                    La cantidad minima debera ser: 1
+                </mat-error>
+                <mat-error *ngIf="r.cantidad.errors.max">
+                    La cantidad maxima debera ser: {{detalle.cantidadIngresoSaldo}}
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>PRECIO DE VENTA</mat-label>
+            <input matInput autocomplete="off" placeholder="precioVenta" formControlName="precioVenta" type="number"
+                [required]="true">
+            <mat-icon matSuffix>attach_money</mat-icon>
+            <mat-error *ngIf="registroControl && r.precioVenta.errors">
+                <mat-error *ngIf="r.precioVenta.errors.required">
+                    Se requiere el precio de venta
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- PIE -->
+    <div mat-dialog-actions>
+        <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+            <mat-icon>done</mat-icon> Actualizar
+        </button>
+    </div>
+
+</form>

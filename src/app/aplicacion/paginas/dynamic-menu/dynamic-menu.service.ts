@@ -1,0 +1,88 @@
+import { Injectable, Injector, ComponentFactoryResolver, ApplicationRef, EmbeddedViewRef } from '@angular/core';
+import { Menu } from '../../tema/components/menu/menu.model';
+import { VerticalMenuComponent } from '../../tema/components/menu/vertical-menu/vertical-menu.component';
+
+
+@Injectable()
+export class DynamicMenuService {
+
+    constructor(
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private applicationRef: ApplicationRef,
+        private injector: Injector) {
+
+    }
+
+
+    adicionarMenu(component: any, menuItems: Array<Menu>, menuItem: any): void {
+
+        const lastId = menuItems[menuItems.length - 1].id;
+        const newMenuItem = new Menu(
+            lastId + 1,
+            menuItem.title,
+            menuItem.routerLink,
+            menuItem.href,
+            menuItem.icon,
+            menuItem.target,
+            menuItem.hasSubMenu,
+            parseInt(menuItem.parentId, 0)
+        );
+
+        menuItems.push(newMenuItem);
+        const item = menuItems.filter(item => item.id === newMenuItem.parentId)[0];
+        if (item) {
+            item.hasSubMenu = true;
+        }
+        const componentRef = this.componentFactoryResolver
+            .resolveComponentFactory(component)
+            .create(this.injector);
+
+        this.applicationRef.attachView(componentRef.hostView);
+
+        const instance = componentRef.instance as VerticalMenuComponent;
+        instance.menuItems = menuItems;
+        instance.menuParentId = 0;
+
+        const elem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+
+        const verticalMenu = document.getElementById('vertical-menu');
+        verticalMenu?.replaceChild(elem, verticalMenu.children[0]);
+
+    }
+
+    addNewMenuItem(component: any, menuItems: Array<Menu>, menuItem: any): void {
+
+        const lastId = menuItems[menuItems.length - 1].id;
+        const newMenuItem = new Menu(
+            lastId + 1,
+            menuItem.title,
+            menuItem.routerLink,
+            menuItem.href,
+            menuItem.icon,
+            menuItem.target,
+            menuItem.hasSubMenu,
+            parseInt(menuItem.parentId, 0)
+        );
+
+        menuItems.push(newMenuItem);
+        const item = menuItems.filter(item => item.id === newMenuItem.parentId)[0];
+        if (item) {
+            item.hasSubMenu = true;
+        }
+        const componentRef = this.componentFactoryResolver
+            .resolveComponentFactory(component)
+            .create(this.injector);
+
+        this.applicationRef.attachView(componentRef.hostView);
+
+        const instance = <VerticalMenuComponent>componentRef.instance;
+        instance.menuItems = menuItems;
+        instance.menuParentId = 0;
+
+        const elem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+
+        const verticalMenu = document.getElementById('vertical-menu');
+        verticalMenu?.replaceChild(elem, verticalMenu.children[0]);
+
+    }
+}

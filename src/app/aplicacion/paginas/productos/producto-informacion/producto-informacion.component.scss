@@ -1,0 +1,30 @@
+.example-tab-icon {
+    margin-right: 8px;
+}
+.contenido {
+    height: 400px;
+}
+
+fieldset {
+    border: none;
+    margin-top: 2px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px;
+    border: 1px solid rgb(245, 240, 240);
+}
+
+fieldset legend {
+    font-family: "Electrolize", sans-serif;
+    color: rgb(143, 137, 137);
+    font-weight: 300;
+    font-size: 13px;
+    text-align: left;
+    width: auto;
+    margin-left: 2px;
+    margin-right: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}

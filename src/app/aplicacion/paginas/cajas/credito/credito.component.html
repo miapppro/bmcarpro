@@ -1,0 +1,124 @@
+<!-- TITULO -->
+<div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+    <div fxLayout="row">
+        <button mat-button>
+            <mat-icon>point_of_sale</mat-icon> Pagar a Credito
+        </button>
+    </div>
+    <div fxLayout="row"></div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <button mat-mini-fab (click)="obtenerPendientes()" matTooltip="Nuevo (F2)">
+            <mat-icon>update</mat-icon>
+        </button>
+    </div>
+</div>
+
+
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="30%">
+        <!-- FORM -->
+        <form *ngIf="buscadorFormGroup" [formGroup]="buscadorFormGroup" (ngSubmit)="obtenerPendientes()" #aForm>
+            <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="50%">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>
+                            <mat-icon>search</mat-icon> Buscar
+                        </mat-label>
+                        <input matInput autocomplete="off" placeholder="Buscar..." name="buscador"
+                            formControlName="buscador" type="text">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex="30%">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>
+                            <mat-icon>reorder</mat-icon> Limite
+                        </mat-label>
+                        <input matInput placeholder="Limite" formControlName="limite" type="number">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex="20%" fxLayoutAlign="end center">
+                    <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="tabla-contenedor mat-elevation-z8">
+            <mat-selection-list #shoes [multiple]="false">
+                <mat-list-option *ngFor="let item of pendientes" [value]="item"
+                    (click)="obtenerParaPagarACreditoPorCliente(item)">
+                    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                        <div fxFlex="70%">
+                            {{item.Cliente.empresa}} <br>
+                            {{item.Cliente.nombres}} ({{item.cantidadVentas}})
+                        </div>
+                        <div fxFlex="30%">
+                            {{item.totalSaldo| number:'1.2-2'}} / {{item.totalTotal| number:'1.2-2'}}
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                </mat-list-option>
+            </mat-selection-list>
+        </div>
+    </div>
+    <div fxFlex="70%">
+        <div *ngIf="pendienteSeleccionado">
+            Cliente: <b>{{cliente.empresa}}</b>
+        </div>
+
+        <table class="w-100" *ngIf="pendienteSeleccionado">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">Nº</th>
+                    <th style="width: 10%;">Venta</th>
+                    <th style="width: 40%;">Fecha</th>
+                    <th style="width: 10%;">Total</th>
+                    <th style="width: 10%;">Acumulado</th>
+                    <th style="width: 10%;">Saldo</th>
+                    <th style="width: 15%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of ventas ; index as i">
+                    <td>{{i+1}}</td>
+                    <td style="text-align: center;">{{item.codigo}}</td>
+                    <td>
+                        {{item.Sucursal.descripcion}} - {{item.Almacen.descripcion}} <br />
+                        {{item.registro | date:'EEEE dd LLLL yyyy hh:mm:ss'}}
+                    </td>
+                    <td style="text-align: end;">{{item.total | number:'1.2-2'}}</td>
+                    <td style="text-align: end;">{{item.totalAcumulado | number:'1.2-2'}}</td>
+                    <td style="text-align: end;">{{item.totalSaldo | number:'1.2-2'}}</td>
+                    <td>
+                        <mat-icon color="primary" (click)="imprimirVenta(item)" style="cursor: pointer"
+                            matTooltip="Ver Venta">
+                            search
+                        </mat-icon>
+                        <mat-icon color="accent" (click)="pagos(item)" style="cursor: pointer" matTooltip="Ver Pagos">
+                            paid
+                        </mat-icon>
+                        <mat-icon color="warn" (click)="pagar(item)" style="cursor: pointer" matTooltip="Pagar">
+                            control_point
+                        </mat-icon>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>{{pendienteSeleccionado.cantidadVentas}}</th>
+                    <th colspan="2">Total</th>
+                    <th style="text-align: right; font-size: 15px;">{{pendienteSeleccionado.totalTotal |
+                        number:'1.2-2'}}</th>
+                    <th style="text-align: right; font-size: 15px;">-</th>
+                    <th style="text-align: right; font-size: 25px;">{{pendienteSeleccionado.totalSaldo |
+                        number:'1.2-2'}}</th>
+                    <th>.</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

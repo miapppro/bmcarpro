@@ -1,0 +1,80 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">{{ data.nuevo? 'add':'edit'}}</mat-icon>
+            Proveedor
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<!-- FORM -->
+<form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="onSubmit()">
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>CI/NIT</mat-label>
+            <input matInput autocomplete="off" placeholder="Numero de Identificacion" formControlName="ci" type="text"
+                [required]="true">
+            <mat-icon matSuffix>account_circle</mat-icon>
+            <mat-error *ngIf="registroControl && r.ci.errors">
+                <mat-error *ngIf="r.ci.errors.required">
+                    Se requiere la Cedula de Identidad
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <!--  (blur)="buscarDescripcion()" -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>RAZON SOCIAL</mat-label>
+            <input matInput autocomplete="off" placeholder="Razon social" formControlName="razon" type="text"
+                [required]="true">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="registroControl && r.razon.errors">
+                <mat-error *ngIf="r.razon.errors.required">
+                    Se requiere la Razon Social
+                </mat-error>
+                <mat-error *ngIf="r.razon.errors.minlength">
+                    Debe tener al menos 3 caracteres
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Empresa</mat-label>
+            <input matInput autocomplete="off" placeholder="Empresa" formControlName="empresa" type="text">
+            <mat-icon matSuffix>home</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Nombre Completo</mat-label>
+            <input matInput autocomplete="off" placeholder="Nombres y Apellidos" formControlName="nombres" type="text">
+            <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Celular</mat-label>
+            <input matInput autocomplete="off" placeholder="Telefono o Celular" formControlName="celular" type="number">
+            <mat-icon matSuffix>phone</mat-icon>
+        </mat-form-field>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- PIE -->
+    <div mat-dialog-actions>
+        <button cdkFocusInitial type="submit" mat-raised-button color="warn" [disabled]="boton">
+            <mat-icon>done</mat-icon> {{ data.nuevo? 'Registrar!':'Actualizar!'}}
+        </button>
+    </div>
+
+</form>

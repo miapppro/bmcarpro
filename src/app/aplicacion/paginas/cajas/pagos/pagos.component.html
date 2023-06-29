@@ -1,0 +1,26 @@
+<p>Pagos de la venta: <b *ngIf="venta">{{venta.codigo}}</b> </p>
+<table class="w-100">
+    <thead>
+        <tr>
+            <th style="width: 5%;">Nº</th>
+            <th style="width: 55%;">Sucursal - Almacen</th>
+            <th style="width: 10%;">Arqueo</th>
+            <th style="width: 10%;">Monto</th>
+            <th style="width: 10%;">Acumulado</th>
+            <th style="width: 10%;">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of pagos ; index as i">
+            <td>{{i+1}}</td>
+            <td>
+                {{item.Sucursal.descripcion}} - {{item.Almacen.descripcion}} <br>
+                {{item.registro | date:'EEEE dd LLLL yyyy hh:mm:ss'}}
+            </td>
+            <td>{{item.Arqueo.codigo}}</td>
+            <td style="text-align: end;">{{item.monto | number:'1.2-2'}}</td>
+            <td style="text-align: end;">{{item.montoAcumulado | number:'1.2-2'}}</td>
+            <td style="text-align: end;">{{item.montoSaldo | number:'1.2-2'}}</td>
+        </tr>
+    </tbody>
+</table>

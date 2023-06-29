@@ -1,0 +1,112 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">info</mat-icon>
+            Informacion de Producto: &nbsp;<b *ngIf="producto">{{producto.codigo}} {{producto.descripcion}}</b>
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<mat-tab-group mat-dialog-content>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">info</mat-icon>
+            Informacion
+        </ng-template>
+        <div class="contenido">
+            <div *ngIf="producto" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="33%">
+                    <fieldset>
+                        <legend>Codigo</legend>
+                        {{producto.codigo}}
+                    </fieldset>
+                    <fieldset>
+                        <legend>Descripcion</legend>
+                        {{producto.descripcion}}
+                    </fieldset>
+                </div>
+                <div fxFlex="33%">
+                    <fieldset>
+                        <legend>Categoria</legend>
+                        {{producto.Categoria.descripcion}}
+                    </fieldset>
+                    <fieldset>
+                        <legend>Fabricante</legend>
+                        {{producto.Fabricante.descripcion}}
+                    </fieldset>
+                    <fieldset>
+                        <legend>Clasificacion</legend>
+                        {{producto.Clasificacion.descripcion}}
+                    </fieldset>
+                </div>
+                <div fxFlex="33%">
+                    <fieldset>
+                        <legend>Codigo Proveedor</legend>
+                        {{producto.codigoProveedor}}
+                    </fieldset>
+                    <fieldset>
+                        <legend>Codigo de Barra</legend>
+                        {{producto.codigoBarra}}
+                    </fieldset>
+                    <fieldset>
+                        <legend>Detalle</legend>
+                        {{producto.detalle}}
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+
+    <!-- INGRESOS -->
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+            Ingresos
+        </ng-template>
+        <div class="contenido">
+            <app-ingresos *ngIf="producto" [producto]="producto"></app-ingresos>
+        </div>
+    </mat-tab>
+
+    <!-- EGRESOS -->
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+            Egresos
+        </ng-template>
+        <div class="contenido">
+            <app-egresos *ngIf="producto" [producto]="producto"></app-egresos>
+        </div>
+    </mat-tab>
+
+    <!-- COMPRAS -->
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+            Compras
+        </ng-template>
+
+        <div class="contenido">
+            <app-compras *ngIf="producto" [producto]="producto"></app-compras>
+        </div>
+    </mat-tab>
+
+    <!-- VENTAS -->
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+            Ventas
+        </ng-template>
+        <div class="contenido">
+            <app-ventas *ngIf="producto" [producto]="producto"></app-ventas>
+        </div>
+    </mat-tab>
+</mat-tab-group>

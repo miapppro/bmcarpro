@@ -1,0 +1,99 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row" fxLayoutAlign="star">
+            <button mat-button>
+                <mat-icon color="primary">add</mat-icon>
+                Nuevo Usuario
+            </button>
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<!-- FORM -->
+<form *ngIf="formRegistro" [formGroup]="formRegistro" (ngSubmit)="onSubmit()">
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Persona</mat-label>
+            <mat-select formControlName="Persona" [required]="true"
+                (selectionChange)="seleccionarPersona($event.value)">
+                <mat-option *ngFor="let item of personas" [value]="item._id">
+                    {{item.primerApellido}} {{item.segundoApellido}} {{item.nombres}}
+                </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="submittedR && r.Persona.errors">
+                <mat-error *ngIf="r.Persona.errors.required">
+                    Se requiere la Persona!
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Usuario</mat-label>
+            <input matInput autocomplete="off" placeholder="Usuario" formControlName="usuario" [required]="true">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="submittedR && r.usuario.errors">
+                <mat-error *ngIf="r.usuario.errors.required">
+                    Se requiere el Correo
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Clave</mat-label>
+            <input type="password" matInput autocomplete="off" placeholder="Clave" formControlName="clave"
+                [required]="true">
+            <mat-icon matSuffix>{{r.clave.errors? 'lock_open' : 'lock'}}</mat-icon>
+            <mat-error *ngIf="submittedR && r.clave.errors">
+                <mat-error *ngIf="r.clave.errors.required">
+                    Se requiere la clave
+                </mat-error>
+                <mat-error *ngIf="r.clave.errors.minlength">
+                    Debe tener al menos 6 caracteres
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <ng-select [items]="sucursales" bindLabel="descripcion" bindValue="_id" placeholder="Selecciona Sucursal"
+            appendTo="body" formControlName="Sucursal" (change)="cambiarSucursal(false)">
+        </ng-select>
+        <mat-error *ngIf="submittedR && r.Sucursal.errors">
+            <mat-error *ngIf="r.Sucursal.errors.required">
+                Se requiere una Sucursal!
+            </mat-error>
+        </mat-error>
+
+        <ng-select [items]="almacenes" bindLabel="descripcion" bindValue="_id" placeholder="Selecciona Almacen"
+            appendTo="body" formControlName="Almacen">
+        </ng-select>
+        <mat-error *ngIf="submittedR && r.Almacen.errors">
+            <mat-error *ngIf="r.Almacen.errors.required">
+                Se requiere un Almacen!
+            </mat-error>
+        </mat-error>
+
+    </div>
+
+    <!-- PIE -->
+    <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center" class="flex-p margen">
+        <div fxLayout="row"> </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+                <mat-icon>done</mat-icon> Registrar Usuario!
+            </button>
+        </div>
+    </div>
+
+</form>

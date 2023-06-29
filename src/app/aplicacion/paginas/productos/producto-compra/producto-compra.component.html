@@ -1,0 +1,135 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">search</mat-icon>
+            Buscar producto...
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="50%">
+
+        <!-- FORM -->
+        <form *ngIf="buscadorFormGroup" [formGroup]="buscadorFormGroup" (ngSubmit)="buscar()">
+            <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="80%">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>
+                            <mat-icon>search</mat-icon> Buscar
+                        </mat-label>
+                        <input matInput autocomplete="off" placeholder="Buscar..." formControlName="buscador"
+                            type="text">
+                        <mat-hint>Buscar por codigo y descripcion</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="20%" fxLayoutAlign="end top">
+                    <button type="submit" mat-raised-button color="accent">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- TABLA -->
+        <div class="tabla-contenedor mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" matSort class="w-100">
+
+                <!--  -->
+                <ng-container matColumnDef="codigo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 60%">PRODUCTO</th>
+                    <td mat-cell *matCellDef="let element">
+                        <b>{{element.codigo}}</b>: {{element.descripcion}} <br>
+                        <span style="font-size: 9px;">{{element.detalle}}</span>
+                    </td>
+                </ng-container>
+
+                <!-- OPCIONES -->
+                <ng-container matColumnDef="opciones">
+                    <th mat-header-cell *matHeaderCellDef style="width: 10%; text-align: right;"></th>
+                    <td mat-cell *matCellDef="let element" style="text-align: right;">
+                        <button mat-raised-button (click)="seleccionarProducto(element)" matTooltip="Detalle Persona">
+                            Compras
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (dblclick)="seleccionarProducto(row)"
+                    (mouseenter)="row.isActive=true" (mouseleave)="row.isActive=false">
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    <div fxFlex="50%">
+
+        <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+            <div fxFlex="80%" style="height: 76px;">
+                <p *ngIf="productoSeleccionado" style="font-size: 20px;">
+                    {{productoSeleccionado.codigo}}
+                </p>
+                <p *ngIf="productoSeleccionado" style="font-size: 20px;">
+                    {{productoSeleccionado.descripcion}}
+                </p>
+            </div>
+            <div fxFlex="20%" fxLayoutAlign="end top">
+                <button *ngIf="productoSeleccionado" mat-raised-button color="primary"
+                    matTooltip="Nuevo Ingreso de Producto" (click)="compraNuevo()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </div>
+
+
+
+        <!-- TABLA -->
+        <div class="tabla-contenedor mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource2" matSort class="w-100">
+
+                <!--  -->
+                <ng-container matColumnDef="cantidad">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 60%">CANTIDAD</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.cantidad}}
+                    </td>
+                </ng-container>
+
+                <!--  -->
+                <ng-container matColumnDef="precioVenta">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 60%">PV</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.precioVenta}}
+                    </td>
+                </ng-container>
+
+                <!-- OPCIONES -->
+                <ng-container matColumnDef="opciones">
+                    <th mat-header-cell *matHeaderCellDef style="width: 10%; text-align: right;"></th>
+                    <td mat-cell *matCellDef="let element" style="text-align: right;">
+                        <button mat-raised-button (click)="seleccionarIngresoDetalle(element)"
+                            matTooltip="Detalle Persona">
+                            Seleccionar
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns2; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns2;"
+                    (dblclick)="seleccionarIngresoDetalle(row)">
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<span style="color: rgb(8, 173, 214);">doble click para seleccionar...</span>

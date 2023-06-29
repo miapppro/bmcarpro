@@ -1,0 +1,176 @@
+<!-- TITULO -->
+<div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+    <div fxLayout="row">
+        <button mat-button>
+            <mat-icon>local_mall</mat-icon> Ventas
+        </button>
+    </div>
+    <div fxLayout="row"></div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <button mat-mini-fab (click)="nuevo()" matTooltip="Nuevo (F2)">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<!-- FORM -->
+<form *ngIf="buscadorFormGroup" [formGroup]="buscadorFormGroup" (ngSubmit)="buscar()" #aForm>
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+        <div fxFlex="30%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>search</mat-icon> Buscar
+                </mat-label>
+                <input matInput autocomplete="off" placeholder="Buscar..." name="buscador" formControlName="buscador"
+                    type="text">
+            </mat-form-field>
+        </div>
+
+        <div fxFlex="20%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>reorder</mat-icon> Limite
+                </mat-label>
+                <input matInput placeholder="Limite" formControlName="limite" type="number">
+            </mat-form-field>
+        </div>
+        <div fxFlex="20%">
+            <ng-select placeholder="Selecciona una Sucursal" formControlName="sucursal" class="w-100"
+                [clearable]="false" (change)="buscar()">
+                <ng-option [value]="0">
+                    TODOS
+                </ng-option>
+                <ng-option *ngFor="let item of sucursales" [value]="item._id">
+                    {{item.codigo}} - {{item.descripcion}}
+                </ng-option>
+            </ng-select>
+        </div>
+        <div fxFlex="20%">
+            <ng-select placeholder="Selecciona una Opcion" formControlName="aprobado" class="w-100" [clearable]="false"
+                (change)="buscar()">
+                <ng-option [value]="0">
+                    TODOS
+                </ng-option>
+                <ng-option [value]="true">
+                    APROBADOS
+                </ng-option>
+                <ng-option [value]="false">
+                    PENDIENTES
+                </ng-option>
+            </ng-select>
+        </div>
+        <div fxFlex="10%" fxLayoutAlign="end center">
+            <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+                <mat-icon>search</mat-icon> Buscar
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- TABLA -->
+<div class="tabla-contenedor mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort class="w-100">
+
+        <!--  -->
+        <ng-container matColumnDef="codigo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">CODIGO</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon color="{{element.activo? 'primary' : 'warn'}}">
+                    {{element.activo? 'done' : 'close'}}
+                </mat-icon>
+                {{element.codigo}}
+            </td>
+        </ng-container>
+
+        <!--  -->
+        <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 30%"> SUCURSAL - ALMACEN 
+            </th>
+            <td mat-cell *matCellDef="let element">
+                <span style="font-size: 10px;">
+                    {{element.Sucursal.descripcion}} - {{element.Almacen.descripcion}} ({{element.tipo}})
+                </span> <br />
+                {{element.Cliente.ci}} - {{element.Cliente.razon}} - {{element.Cliente.empresa}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="registro">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%">FECHA</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.registro | date}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="aprobado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">APROBADO</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon color="{{element.aprobado? 'primary' : 'warn'}}">
+                    {{element.aprobado? 'done' : 'close'}}
+                </mat-icon>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="pagado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">PAGADO</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon color="{{element.pagado? 'primary' : 'warn'}}">
+                    {{element.pagado? 'done' : 'close'}}
+                </mat-icon>
+            </td>
+        </ng-container>
+
+        <!--  -->
+        <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">TOTAL</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.total | number:'1.2-2'}}
+            </td>
+        </ng-container>
+
+        <!-- OPCIONES -->
+        <ng-container matColumnDef="opciones">
+            <th mat-header-cell *matHeaderCellDef style="width: 15%; text-align: right;"></th>
+            <td mat-cell *matCellDef="let element" style="text-align: right;">
+
+           
+                <button mat-icon-button (click)="detalle(element)" matTooltip="Vender">
+                    <mat-icon color="primary">shopping_cart</mat-icon>
+                </button>
+           
+                <button *ngIf="element.activo" mat-icon-button [matMenuTriggerFor]="menu" color="primany" matTooltip="Opciones">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #menu="matMenu">
+                    <div style="text-align: center;">
+                        <div>
+                            <b>{{element.codigo}}</b>
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <button *ngIf="element.aprobado==false" mat-menu-item (click)="editar(element)" matTooltip="Editar">
+                        <mat-icon>edit</mat-icon> Editar
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button *ngIf="element.aprobado==false" mat-menu-item (click)="eliminar(element)" matTooltip="Eliminar">
+                        <mat-icon>delete</mat-icon> Eliminar
+                    </button>
+                </mat-menu>
+
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (dblclick)="detalle(row)"
+            (mouseenter)="row.isActive=true" (mouseleave)="row.isActive=false">
+        </tr>
+    </table>
+
+</div>
+
+<!-- PAGINADOR-->
+<mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 30, 40, 50, 100, 200]" showFirstLastButtons
+    class="mat-elevation-z8">
+</mat-paginator>

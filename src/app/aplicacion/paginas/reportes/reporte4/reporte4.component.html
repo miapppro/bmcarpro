@@ -1,0 +1,114 @@
+<p>Reporte de Stock</p>
+
+<!-- FORM -->
+<form *ngIf="buscadorFormGroup" [formGroup]="buscadorFormGroup" (ngSubmit)="buscar()" #aForm>
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+        <div fxFlex="30%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>search</mat-icon> Buscar
+                </mat-label>
+                <input matInput autocomplete="off" placeholder="Buscar..." name="buscador" formControlName="buscador"
+                    type="text">
+            </mat-form-field>
+        </div>
+        <div fxFlex="20%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>reorder</mat-icon> Limite
+                </mat-label>
+                <input matInput placeholder="Limite" formControlName="limite" type="number">
+            </mat-form-field>
+        </div>
+        <div fxFlex="50%">
+            <ng-select placeholder="Almacen" formControlName="idAlmacen" class="w-100" [clearable]="false"
+                (change)="buscar()">
+                <ng-option [value]="0">
+                    TODOS LOS ALMACENES
+                </ng-option>
+                <ng-option *ngFor="let item of almacenes" [value]="item._id">
+                    {{item.codigo}} - {{item.descripcion}}
+                </ng-option>
+            </ng-select>
+        </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+        <div fxFlex="30%">
+            <ng-select placeholder="Categoria" formControlName="idCategoria" class="w-100" [clearable]="false"
+                (change)="buscar()">
+                <ng-option [value]="0">
+                    TODOS LOS CATEGORIAS
+                </ng-option>
+                <ng-option *ngFor="let item of categorias" [value]="item._id">
+                    {{item.codigo}} - {{item.descripcion}}
+                </ng-option>
+            </ng-select>
+        </div>
+        <div fxFlex="30%">
+            <ng-select placeholder="Fabricante" formControlName="idFabricante" class="w-100" [clearable]="false"
+                (change)="buscar()">
+                <ng-option [value]="0">
+                    TODOS LOS FABRICANTES
+                </ng-option>
+                <ng-option *ngFor="let item of fabricantes" [value]="item._id">
+                    {{item.codigo}} - {{item.descripcion}}
+                </ng-option>
+            </ng-select>
+        </div>
+        <div fxFlex="30%">
+            <ng-select placeholder="Clasificacion" formControlName="idClasificacion" class="w-100" [clearable]="false"
+                (change)="buscar()">
+                <ng-option [value]="0">
+                    TODOS LOS CLASIFICACIONES
+                </ng-option>
+                <ng-option *ngFor="let item of clasificaciones" [value]="item._id">
+                    {{item.codigo}} - {{item.descripcion}}
+                </ng-option>
+            </ng-select>
+        </div>
+        <div fxFlex="10%" fxLayoutAlign="end center">
+            <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+    </div>
+</form>
+
+<mat-divider></mat-divider>
+
+<table class="w-100">
+    <thead>
+        <tr>
+            <th>CODIGO</th>
+            <th>CODIGO PRO.</th>
+            <th>DESCRIPCION</th>
+            <th>STOCK</th>
+            <th>PC P.</th>
+            <th>PV P.</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of lista">
+            <td>{{item.Producto.codigo}}</td>
+            <td>
+                {{item.Producto.codigoProveedor}} <br>
+              <span style="font-size: 10px;">{{item.Producto.codigoBarra}}</span>  
+            </td>
+            <td>
+                {{item.Producto.descripcion}}<br>
+                <span style="font-size: 10px;">({{item.cantidadIngreso}})</span>  
+                
+            </td>
+            <td>
+             {{item.totalStock}} de {{item.total}}
+            </td>
+            <td>{{item.pc}}</td>
+            <td>{{item.pv}}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<button (click)="exportar()" mat-raised-button color="accent">
+    <mat-icon>get_app</mat-icon> Exportar a Excel
+</button>

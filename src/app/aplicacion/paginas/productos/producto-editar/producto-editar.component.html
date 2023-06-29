@@ -1,0 +1,138 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">{{ data.nuevo? 'add':'edit'}}</mat-icon>
+            {{ data.nuevo? 'Nuevo':'Editar'}} - Producto
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="accent" (click)="nuevoCategoria()" style="cursor: pointer" matTooltip="Crear Categoria">
+                add_box </mat-icon>
+            <mat-icon color="accent" (click)="nuevoFabricante()" style="cursor: pointer" matTooltip="Crear Fabricante">
+                add_box </mat-icon>
+            <mat-icon color="accent" (click)="nuevoClasificacion()" style="cursor: pointer"
+                matTooltip="Crear Clasificacion">
+                add_box </mat-icon>
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<!-- FORM -->
+<form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="onSubmit()">
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <ng-select [items]="categorias" bindLabel="descripcion" bindValue="_id" placeholder="Selecciona Categoria"
+            appendTo="body" formControlName="Categoria" style="font-family: roboto">
+        </ng-select>
+        <mat-error *ngIf="registroControl && r.Categoria.errors">
+            <mat-error *ngIf="r.Categoria.errors.required">
+                Se requiere una Categoria!
+            </mat-error>
+        </mat-error>
+
+
+        <ng-select [items]="fabricantes" bindLabel="descripcion" bindValue="_id" placeholder="Selecciona Fabricante"
+            appendTo="body" formControlName="Fabricante">
+        </ng-select>
+        <mat-error *ngIf="registroControl && r.Fabricante.errors">
+            <mat-error *ngIf="r.Fabricante.errors.required">
+                Se requiere un Fabricante!
+            </mat-error>
+        </mat-error>
+
+        <ng-select [items]="clasificaciones" bindLabel="descripcion" bindValue="_id"
+            placeholder="Selecciona Clasificacion" appendTo="body" formControlName="Clasificacion"
+            (change)="seleccionarClasificacion($event)">
+        </ng-select>
+        <mat-error *ngIf="registroControl && r.Clasificacion.errors">
+            <mat-error *ngIf="r.Clasificacion.errors.required">
+                Se requiere una Clasificacion!
+            </mat-error>
+        </mat-error>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Codigo</mat-label>
+            <input matInput autocomplete="off" placeholder="Codigo" formControlName="codigo" type="text"
+                [required]="true">
+
+            <mat-error *ngIf="registroControl && r.codigo.errors">
+                <mat-error *ngIf="r.codigo.errors.required">
+                    Se requiere la codigo
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Descripcion</mat-label>
+            <input matInput autocomplete="off" placeholder="Descripcion" formControlName="descripcion" type="text"
+                [required]="true">
+            <mat-icon matSuffix>description</mat-icon>
+            <mat-error *ngIf="registroControl && r.descripcion.errors">
+                <mat-error *ngIf="r.descripcion.errors.required">
+                    Se requiere la descripcion
+                </mat-error>
+                <mat-error *ngIf="r.descripcion.errors.minlength">
+                    Debe tener al menos 3 caracteres
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Detalle</mat-label>
+            <input matInput autocomplete="off" placeholder="Detalle" formControlName="detalle" type="text"
+                [required]="true">
+
+            <mat-error *ngIf="registroControl && r.detalle.errors">
+                <mat-error *ngIf="r.detalle.errors.required">
+                    Se requiere la detalle
+                </mat-error>
+                <mat-error *ngIf="r.detalle.errors.minlength">
+                    Debe tener al menos 5 caracteres
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+            <div fxFlex="50%">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Codigo de Proveedor</mat-label>
+                    <input matInput placeholder="Codigo de Proveedor" formControlName="codigoProveedor" type="text"
+                        [required]="true">
+                    <mat-icon matSuffix>
+                        outlined_flag
+                    </mat-icon>
+                    <mat-error *ngIf="registroControl && r.codigoProveedor.errors">
+                        <mat-error *ngIf="r.codigoProveedor.errors.required">
+                            Se requiere la codigo de Proveedor
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="50%">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Codigo de Barra</mat-label>
+                    <input matInput placeholder="Codigo de Barra" formControlName="codigoBarra" type="text">
+                    <mat-icon matSuffix>view_column</mat-icon>
+                </mat-form-field>
+            </div>
+        </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- PIE -->
+    <div mat-dialog-actions>
+        <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+            <mat-icon>done</mat-icon> {{ data.nuevo? 'Registrar!':'Actualizar!'}}
+        </button>
+    </div>
+
+</form>

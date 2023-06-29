@@ -1,0 +1,41 @@
+<table>
+    <thead>
+        <tr>
+            <th>Motivo</th>
+            <th>Sucursal</th>
+            <th>Almacen</th>
+            <th>Ingreso</th>
+            <th>Precio Compra</th>
+            <th>Precio Venta</th>
+            <th>Cantidad</th>
+            <th>Cantidad Saldo</th>
+            <th>Registro</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of ingresos">
+            <td>{{item.compra? 'COMPRA':'INGRESO'}}</td>
+            <td>{{item.Sucursal.descripcion}}</td>
+            <td>{{item.Almacen.descripcion}}</td>
+            <td>{{item.Ingreso.codigo}}</td>
+            <td style="text-align: end;">{{item.precioCompra | number:'1.2-2'}}</td>
+            <td style="text-align: end;">{{item.precioVenta | number:'1.2-2'}}</td>
+            <td style="text-align: center;">{{item.cantidad}}</td>
+            <td style="text-align: center;">{{item.cantidadSaldo}}</td>
+            <td>{{item.registro | date:'EEEE dd LLLL yyyy hh:mm:ss a'}}</td>
+            <td>
+                <button mat-raised-button color="accent" (click)="ventasPorIngreso(item)">
+                    <mat-icon>search</mat-icon> Ventas
+                </button>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="7">Total Saldo</th>
+            <th style="text-align: center; font-size: 30px;">{{cantidadTotal}}</th>
+            <th colspan="2"></th>
+        </tr>
+    </tfoot>
+</table>

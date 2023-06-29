@@ -1,0 +1,17 @@
+h1 {
+    color: rgb(0, 162, 255);
+}
+h2 {
+    border: solid 1px;
+}
+
+#limheight {
+    height: 300px; /*your fixed height*/
+    -webkit-column-count: 3;
+       -moz-column-count: 3;
+            column-count: 3; /*3 in those rules is just placeholder -- can be anything*/
+}
+
+#limheight li {
+    display: inline-block; /*necessary*/
+}

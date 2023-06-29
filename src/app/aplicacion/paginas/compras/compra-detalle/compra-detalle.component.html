@@ -1,0 +1,178 @@
+<!-- TITULO -->
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="40%">
+        <button mat-button>
+            <mat-icon>toc</mat-icon> Detalle de Compra
+        </button>
+        <br/>
+        Proveedor: <b *ngIf="compraRelacionado">{{compraRelacionado.Proveedor.empresa}}</b>
+    </div>
+    <div fxFlex="50%">
+        <form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="cambiarIngreso()">
+            <ng-select placeholder="Selecciona una Compra" (change)="cambiarIngreso()" formControlName="idCompra"
+                [required]="true" class="w-100" [clearable]="false">
+                <ng-option *ngFor="let item of compras" [value]="item._id">
+                    <span>
+                        {{item.codigo}} - {{item.descripcion}}
+                    </span>
+                </ng-option>
+            </ng-select>
+        </form>
+    </div>
+    <div fxFlex="10%" fxLayoutAlign="end center">
+        <button mat-mini-fab (click)="nuevo()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div *ngIf="compra && compra.activo && compra.aprobado==false" fxLayout="row" fxLayoutAlign="space-around"
+    fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="30%" fxLayoutAlign="top">
+        <button cdkFocusInitial type="submit" mat-raised-button color="primary" (click)="buscarProducto()">
+            <mat-icon>search</mat-icon> Buscar Producto (F2)
+        </button>
+    </div>
+    <div fxFlex="40%">
+        <p *ngIf="productoSeleccionado">
+            {{productoSeleccionado.codigo}} - {{productoSeleccionado.descripcion}}
+        </p>
+    </div>
+    <div fxFlex="30%">
+        <form [formGroup]="codigoFormGroup" (ngSubmit)="buscarCodigo()">
+            <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="80%">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Codigo de Barra</mat-label>
+                        <input matInput autocomplete="off" placeholder="Codigo de Barra" formControlName="codigoBarra"
+                            type="text" [required]="true">
+                        <mat-icon matSuffix>qr_code_2</mat-icon>
+                        <mat-hint>Buscar con lecto de barras</mat-hint>
+                        <mat-error *ngIf="codigoControl && c.codigoBarra.errors">
+                            <mat-error *ngIf="c.codigoBarra.errors.required">
+                                Se requiere la codigo
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="20%" fxLayoutAlign="top">
+                    <button type="submit" mat-raised-button color="accent">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div *ngIf="compra && compra.activo; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>
+    <div style="text-align: center;">
+        <div> <b style="color: rgb(7, 132, 204);">COMPRA OFICIAL</b></div>
+    </div>
+</ng-template>
+<ng-template #elseBlock>
+    <div style="text-align: center;">
+        <div> <b style="color: red;">COMPRA ELIMINADA</b></div>
+    </div>
+</ng-template>
+
+<div class="table-wrapper">
+    <table class="fl-table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">PRODUCTO</th>
+                <th style="width: 15%;">LOTE</th>
+                <th style="width: 10%;">BARRA</th>
+                <th style="width: 10%;">PC OFIC.</th>
+                <th style="width: 10%;">PC PROM.</th>
+                <th style="width: 5%;">PC</th>
+                <th style="width: 5%;">PV</th>
+                <th style="width: 10%;">CANTIDAD</th>
+                <th style="width: 10%;">SUBTOTAL</th>
+                <th style="width: 5%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of detalles">
+                <td style="text-align: left;">{{item.Producto.codigo}} - {{item.Producto.descripcion}}</td>
+                <td style="text-align: left;">Lote:{{item.lote}}, V:{{item.loteFecha | date}}</td>
+                <td>{{item.codigoBarra}}</td>
+                <td>{{item.precioCompraOficial}}</td>
+                <td>{{item.precioCompraPromedio}}</td>
+                <td>{{item.precioCompra}}</td>
+                <td>{{item.precioVenta}}</td>
+                <td style="text-align: left;">
+                    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                        <div fxFlex="20%" fxLayoutAlign="start center">
+                            <mat-icon *ngIf="compra.aprobado==false && item.cantidad>1" color="warn"
+                                (click)="restar(item)" style="cursor: pointer" matTooltip="Restar -1">
+                                remove_circle
+                            </mat-icon>
+                        </div>
+                        <div fxFlex="60%" fxLayoutAlign="center center">
+                            <b style="font-size: 20px;">{{item.cantidad}}</b>
+                            <span *ngIf="compra && compra.aprobado"> / {{item.cantidadSaldo}}</span>
+                        </div>
+                        <div fxFlex="20%" fxLayoutAlign="end center">
+                            <mat-icon *ngIf="compra.aprobado==false" color="accent" (click)="sumar(item)"
+                                style="cursor: pointer" matTooltip="Sumar +1">
+                                add_circle
+                            </mat-icon>
+                        </div>
+                    </div>
+                </td>
+                <td style="text-align: right;"><b>{{item.subTotal | number:'1.2-2'}}</b></td>
+                <td>
+                    <mat-icon *ngIf="item.cantidad>0" color="primary" (click)="editarDetalle(item)"
+                        style="cursor: pointer" matTooltip="Editar Detalle">
+                        edit
+                    </mat-icon>
+                    <mat-icon *ngIf="item.aprobado==false && item.eliminar" color="warn" (click)="eliminarItem(item)"
+                        style="cursor: pointer" matTooltip="Eliminar Item del Detalle">
+                        delete
+                    </mat-icon>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Sucursal: <b *ngIf="compraRelacionado">{{compraRelacionado.Sucursal.descripcion}},
+                        {{compraRelacionado.Almacen.descripcion}}</b></th>
+                <th colspan="7">Total</th>
+                <th style="text-align: right; font-size: 25px;">{{total | number:'1.2-2'}}</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+
+
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="10%">
+        <button *ngIf="compra && compra.aprobado" mat-raised-button (click)="descargar()" color="primary">
+            <mat-icon>print</mat-icon> Imprimir Compra
+        </button>
+    </div>
+    <div fxFlex="70%">
+
+    </div>
+    <div fxFlex="20%" fxLayoutAlign="end center">
+        <button *ngIf="compra && compra.activo && compra.aprobado==false" mat-raised-button color="warn"
+            (click)="aprobar()">
+            <mat-icon>done_all</mat-icon> Aprobar Compra
+        </button>
+
+        <!--         
+        <button mat-raised-button color="warn" (click)="aprobar()">
+            <mat-icon>done_all</mat-icon> Aprobar Compra DE PRUEBA
+        </button>
+        -->
+    </div>
+</div>

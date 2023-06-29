@@ -1,0 +1,32 @@
+<table>
+    <thead>
+        <tr>
+            <th>Compra</th>
+            <th>Sucursal</th>
+            <th>Almacen</th>
+            <th>Precio Compra</th>
+            <th>Precio Venta</th>
+            <th>Cantidad</th>
+            <th>Cantidad Saldo</th>
+            <th>Registro</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of compras">
+            <td>{{item.Compra.codigo}}</td>
+            <td>{{item.Sucursal.descripcion}}</td>
+            <td>{{item.Almacen.descripcion}}</td>
+            <td>{{item.precioCompra}}</td>
+            <td>{{item.precioVenta}}</td>
+            <td>{{item.cantidad}}</td>
+            <td>{{item.cantidadSaldo}}</td>
+            <td>{{item.registro | date:'EEEE dd LLLL yyyy hh:mm:ss a'}}</td>
+            <td>
+                <button mat-raised-button color="accent" (click)="ventasPorIngreso(item)">
+                    <mat-icon>search</mat-icon> Ventas
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

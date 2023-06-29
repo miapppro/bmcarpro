@@ -1,0 +1,102 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+    <div fxLayout="row">
+        Descargar: Ingreso: &nbsp; <b *ngIf="ingreso">{{ingreso.codigo}}</b>
+    </div>
+    <div fxLayout="row"></div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+            indeterminate_check_box
+        </mat-icon>
+    </div>
+</div>
+
+<!-- CUERPO -->
+<div mat-dialog-content>
+
+    <div id="print-section">
+
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <td style="width:20%;">
+                        <img src="assets/imagenes/logo/miapppro72.png" alt="">
+                    </td>
+                    <td style="width:40%;">
+                        <b style="color: brown; font-size: 40px;"> BM CAR</b>
+                    </td>
+                    <td style="width: 30%;">
+                        INGRESO DE PRODUCTO
+                    </td>
+                    <td style="width: 10%; text-align: end;">
+                        <b *ngIf="ingreso" style="color: blue; font-size: 30;">{{ingreso.codigo}}</b>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+
+        <table class="fl-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">PRODUCTO</th>
+                    <th style="width: 20%;">CODIGO PRO.</th>
+                    <th style="width: 10%;">BARRA</th>
+                    <th style="width: 10%;">PC</th>
+                    <th style="width: 10%;">PV</th>
+                    <th style="width: 10%;">CANTIDAD</th>
+                    <th style="width: 10%;">SUBTOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of detalle">
+                    <td style="text-align: left;">{{item.Producto.codigo}} - {{item.Producto.descripcion}}</td>
+                    <td style="text-align: left;">{{item.Producto.codigoProveedor}}</td>
+                    <td>{{item.codigoBarra}}</td>
+                    <td>{{item.precioCompra}}</td>
+                    <td>{{item.precioVenta}}</td>
+                    <td style="text-align: left;">
+                        <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                            <div fxFlex="20%" fxLayoutAlign="start center">
+
+                            </div>
+                            <div fxFlex="60%" fxLayoutAlign="center center">
+                                <b style="font-size: 20px;">{{item.cantidad}}</b>
+                                <span *ngIf="ingreso && ingreso.aprobado"> / {{item.cantidadSaldo}}</span>
+                            </div>
+                            <div fxFlex="20%" fxLayoutAlign="end center">
+
+                            </div>
+                        </div>
+                    </td>
+                    <td style="text-align: right;"><b>{{item.subTotal | number:'1.2-2'}}</b></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Sucursal:
+                        <b *ngIf="ingresoRelacionado">{{ingresoRelacionado.Sucursal.descripcion}},
+                            {{ingresoRelacionado.Almacen.descripcion}}</b>
+                    </th>
+                    <th colspan="5">Total</th>
+                    <th style="text-align: right; font-size: 25px;">
+                        <b *ngIf="ingreso">
+                            {{ingreso.total | number:'1.2-2'}}
+                        </b>
+                    </th>
+                    <th></th>
+
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+
+</div>
+
+<!-- PIE -->
+<div mat-dialog-actions>
+    <button cdkFocusInitial mat-raised-button styleSheetFile="/assets/css/ingreso.scss" printSectionId="print-section"
+        color="primary" ngxPrint>
+        <mat-icon>print</mat-icon> Imprimir
+    </button>
+</div>

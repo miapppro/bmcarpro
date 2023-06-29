@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "bmcarpro": {
+      "hosting": {
+        "bmcar": [
+          "bmcarpro"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "bmcarpro"
+  }
+}

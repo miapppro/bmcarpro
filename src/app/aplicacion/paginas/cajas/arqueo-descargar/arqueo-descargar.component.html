@@ -1,0 +1,60 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+    <div fxLayout="row">
+        Descargar: Arqueo: &nbsp; <b *ngIf="arqueoSeleccionado">{{arqueoSeleccionado.codigo}}</b>
+    </div>
+    <div fxLayout="row"></div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+            indeterminate_check_box
+        </mat-icon>
+    </div>
+</div>
+
+<!-- CUERPO -->
+<div mat-dialog-content>
+    <div style="text-align: center;">
+        <div>
+
+            <button cdkFocusInitial mat-raised-button color="primary" matTooltip="Descargar" (click)="descargar()">
+                <mat-icon>print</mat-icon> Imprimir Arqueo
+            </button>
+
+
+
+        </div>
+    </div>
+
+    <div id="print-section">
+        <p>Arqueo</p>
+
+        <table class="fl-table">
+            <thead>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Venta</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of cajaContados">
+                    <td>{{item.codigo}}</td>
+                    <td>{{item.Venta.codigo}}</td>
+                    <td style="text-align: right;">{{item.monto}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total al Contado</th>
+                    <th>.</th>
+                    <th style="text-align: right; font-size: 25px;">100.00</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <button mat-mini-fab styleSheetFile="/assets/css/arqueo.scss" printSectionId="print-section" ngxPrint>
+        <mat-icon>print</mat-icon>
+    </button>
+
+
+</div>

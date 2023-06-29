@@ -1,0 +1,26 @@
+<table>
+    <thead>
+        <tr>
+            <th>Venta</th>
+            <th>Sucursal</th>
+            <th>Almacen</th>
+            <th>Precio Compra</th>
+            <th>Precio Venta</th>
+            <th>Cantidad</th>
+            <th>Sub Total</th>
+            <th>Registro</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of ventas">
+            <td>{{item.Venta.codigo}}</td>
+            <td>{{item.Sucursal.descripcion}}</td>
+            <td>{{item.Almacen.descripcion}}</td>
+            <td style="text-align: end;">{{item.precioCompra | number:'1.2-2'}}</td>
+            <td style="text-align: end;">{{item.precioVenta | number:'1.2-2'}}</td>
+            <td>{{item.cantidad}} de {{item.cantidadIngresoSaldo}}</td>
+            <td style="text-align: end;">{{item.subTotal}}</td>
+            <td>{{item.registro | date:'EEEE dd LLLL yyyy hh:mm:ss a'}}</td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,87 @@
+<p>INGRESO DE PRODUCTOS</p>
+
+<!-- <button (click)="downloadExcel()">Exportar a Excel 3</button> -->
+
+<!-- FORM -->
+<form *ngIf="buscadorFormGroup" [formGroup]="buscadorFormGroup" (ngSubmit)="obtener()" #aForm>
+
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+        <div fxFlex="20%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>search</mat-icon> Buscar
+                </mat-label>
+                <input matInput autocomplete="off" placeholder="Buscar..." name="buscador" formControlName="buscador"
+                    type="text">
+            </mat-form-field>
+        </div>
+        <div fxFlex="60%">
+        </div>
+        <div fxFlex="10%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>reorder</mat-icon> Limite
+                </mat-label>
+                <input matInput placeholder="Limite" formControlName="limite" type="number">
+            </mat-form-field>
+        </div>
+
+        <div fxFlex="10%" fxLayoutAlign="end center">
+            <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+    </div>
+</form>
+
+<table class="w-100">
+    <thead>
+        <tr>
+            <th style="width: 20%;">Ingreso</th>
+            <th style="width: 10%;">Registro</th>
+            <th style="width: 20%;">Producto</th>
+            <th style="width: 10%;">Cantidad</th>
+            <th style="width: 10%;">PC</th>
+            <th style="width: 10%;">PV</th>
+            <th style="width: 10%;">Cantidad Saldo</th>
+            <th style="width: 10%;">Cantidad Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of lista">
+            <td style="text-align: start;">
+                {{item.Ingreso.codigo}} <br>
+                {{item.Sucursal.descripcion}} - {{item.Almacen.descripcion}}
+            </td>
+
+            <td>
+                {{item.registro | date}}
+            </td>
+
+            <td style="text-align: start;">
+                {{item.Producto.codigo}} - {{item.Producto.codigoProveedor}}<br>
+                {{item.Producto.descripcion}}
+            </td>
+  
+            <td style="text-align: center;">
+                {{item.cantidad}}
+            </td>
+            <td style="text-align: end;">
+                {{item.precioCompra | number:'1.2-2'}}
+            </td>
+            <td style="text-align: end;">
+                {{item.precioVenta | number:'1.2-2'}}
+            </td>
+            <td style="text-align: end;">
+                {{item.cantidadSaldo}}
+            </td>
+            <td style="text-align: end;">
+                <b>{{item.total}}</b>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<button (click)="exportar()" mat-raised-button color="accent">
+    <mat-icon>get_app</mat-icon> Exportar a Excel
+</button>

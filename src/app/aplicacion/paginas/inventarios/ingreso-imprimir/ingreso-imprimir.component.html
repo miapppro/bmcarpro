@@ -1,0 +1,55 @@
+<!-- CUERPO -->
+<div mat-dialog-content>
+
+    <div id="print-section">
+        <div class="ticket">
+            <p class="centrado">Mi Tienda PRO
+                <br>La Paz - Bolivia
+                <br>23/08/2021 08:22 a.m.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="cantidad">CANT</th>
+                        <th class="producto">PRODUCTO</th>
+                        <th class="precio">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of detalle">
+                        <td class="cantidad">{{item.cantidad}}</td>
+                        <td class="producto">{{item.Producto.codigo}} - {{item.Producto.descripcion}}</td>
+                        <td class="precio">{{item.precioCompra | number:'1.2-2'}}</td>
+                    </tr>
+                    <tr>
+                        <td class="cantidad"></td>
+                        <td class="producto">TOTAL</td>
+                        <td class="precio">
+                            <b *ngIf="ingreso">
+                                {{ingreso.total | number:'1.2-2'}}
+                            </b>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="centrado">¡GRACIAS POR SU COMPRA!
+                <br>www.mitiendapro.com
+            </p>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center;">
+    <div>
+        <button mat-raised-button color="warn" (click)="onNoClick()">
+            <mat-icon>cancel</mat-icon> Cancelar
+        </button>
+
+        &nbsp;
+
+        <button cdkFocusInitial mat-raised-button styleSheetFile="/assets/css/imprimir.scss"
+            printSectionId="print-section" color="primary" ngxPrint>
+            <mat-icon>print</mat-icon> Imprimir
+        </button>
+    </div>
+</div>

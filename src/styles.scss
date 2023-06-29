@@ -1,0 +1,43 @@
+// for npm roboto-fontface package (to load local files)
+$roboto-font-path: "~roboto-fontface/fonts" !default;
+
+
+// for npm material-icons package (to load local files)
+$material-icons-font-path: "~material-icons/iconfont/";
+
+
+@import url("https://cdn.quilljs.com/1.2.2/quill.snow.css");
+@import url("https://cdn.quilljs.com/1.2.2/quill.bubble.css");
+
+// indigo-pink, deeppurple-amber, purple-green and pink-bluegrey.
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/*
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import "../node_modules/dragula/dist/dragula.min.css";
+@import "../node_modules/@swimlane/ngx-datatable/themes/material.css";
+@import "../node_modules/@swimlane/ngx-datatable/assets/icons.css";
+@import "../node_modules/leaflet/dist/leaflet.css";
+*/
+
+@import "app/aplicacion/tema/styles/base";
+@import "app/aplicacion/tema/styles/theme";
+@import "app/aplicacion/tema/styles/libs-override";
+@import "app/aplicacion/tema/styles/rtl";
+
+@import "~@ng-select/ng-select/themes/default.theme.css";
+// @import "~@ng-select/ng-select/themes/material.theme.css";
+
+
+.cargando {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

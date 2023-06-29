@@ -1,0 +1,47 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row" fxLayoutAlign="star">
+            <button mat-button>
+                <mat-icon color="primary">lock_open</mat-icon>
+                Gestionar permisos
+            </button>
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="primary" (click)="actualizar()" style="cursor: pointer"
+                matTooltip="Actualizar Operaciones">
+                update
+            </mat-icon>
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<!-- CUERPO -->
+<div mat-dialog-content>
+
+    <mat-list role="list">
+        <div mat-subheader *ngIf="usuario">Permisos de: &nbsp;<b>{{usuario.Persona.nombres}}</b></div>
+        <mat-list-item *ngFor="let item of permisos">
+            <!--                     
+        <mat-slide-toggle [checked]="item.activado" (change)="cambiar(item, $event.checked)"
+            style="width: 100%;">
+            {{item.titulo}}
+        </mat-slide-toggle>
+        -->
+
+
+
+
+            <mat-slide-toggle [checked]="item.acceso" (change)="cambiar(item, $event.checked)" style="width: 100%;">
+                {{item.Operacion.title}}
+            </mat-slide-toggle>
+
+            <mat-divider></mat-divider>
+        </mat-list-item>
+    </mat-list>
+</div>

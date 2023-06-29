@@ -1,0 +1,198 @@
+<!-- TITULO -->
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="40%">
+        <button mat-button>
+            <mat-icon>toc</mat-icon> Detalle de Ingreso
+        </button>
+    </div>
+    <div fxFlex="50%">
+        <form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="cambiarIngreso()">
+            <ng-select placeholder="Selecciona un Ingreso" (change)="cambiarIngreso()" formControlName="idIngreso"
+                [required]="true" class="w-100" [clearable]="false">
+                <ng-option *ngFor="let item of ingresos" [value]="item._id">
+                    <span>
+                        {{item.Almacen.descripcion}} : {{item.codigo}} - {{item.descripcion}} - {{item.aprobado?
+                        '✅':'❌'}}
+                    </span>
+                </ng-option>
+            </ng-select>
+        </form>
+    </div>
+    <div fxFlex="10%" fxLayoutAlign="end center">
+        <button mat-mini-fab (click)="nuevo()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div *ngIf="ingreso && ingreso.activo && ingreso.aprobado==false" fxLayout="row" fxLayoutAlign="space-around"
+    fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="30%" fxLayoutAlign="top">
+        <button cdkFocusInitial type="submit" mat-raised-button color="primary" (click)="buscarProducto()">
+            <mat-icon>search</mat-icon> Buscar Producto (F2)
+        </button>
+    </div>
+    <div fxFlex="40%">
+        <p *ngIf="productoSeleccionado">
+            {{productoSeleccionado.codigo}} - {{productoSeleccionado.descripcion}}
+        </p>
+    </div>
+    <div fxFlex="30%">
+        <form [formGroup]="codigoFormGroup" (ngSubmit)="buscarCodigo()"  #aForm>
+            <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="80%">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Codigo de Barra</mat-label>
+                        <input name="codigoBarra" matInput autocomplete="off" placeholder="Codigo de Barra" formControlName="codigoBarra"
+                            type="text" [required]="true">
+                        <mat-icon matSuffix>qr_code_2</mat-icon>
+                        <mat-hint>Buscar con lecto de barras</mat-hint>
+                        <mat-error *ngIf="codigoControl && c.codigoBarra.errors">
+                            <mat-error *ngIf="c.codigoBarra.errors.required">
+                                Se requiere la codigo
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="20%" fxLayoutAlign="top">
+                    <button type="submit" mat-raised-button color="accent">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div *ngIf="ingreso && ingreso.activo; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>
+    <div style="text-align: center;">
+        <div> <b style="color: rgb(7, 132, 204);">OFICIAL</b></div>
+    </div>
+</ng-template>
+<ng-template #elseBlock>
+    <div style="text-align: center;">
+        <div> <b style="color: red;">ELIMINADO</b></div>
+    </div>
+</ng-template>
+
+<div style="overflow-x:auto;">
+    <table *ngIf="ingreso">
+        <thead>
+            <tr>
+                <th style="width: 5%;">Nº</th>
+                <th style="width: 25%;">PRODUCTO</th>
+                <th style="width: 15%;">CODIGO PRO.</th>
+                <th style="width: 10%;">BARRA</th>
+                <th style="width: 10%;">PC</th>
+                <th style="width: 10%;">PV</th>
+                <th style="width: 10%;">CANTIDAD</th>
+                <th style="width: 10%;">SUBTOTAL</th>
+                <th style="width: 5%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of detalles ; index as i">
+                <td data-column="Nº">{{i+1}}</td>
+                <td data-column="PRODUCTO">
+                    <b (click)="editarProducto(item)">{{item.Producto.codigo}}</b> -
+                    {{item.Producto.descripcion}}
+                </td>
+                <td data-column="CODIGO PRO.">{{item.Producto.codigoProveedor}}</td>
+                <td data-column="BARRA">{{item.codigoBarra}}</td>
+                <td data-column="PC">{{item.precioCompra}}</td>
+                <td data-column="PV">{{item.precioVenta}}</td>
+                <td data-column="CANTIDAD">
+                    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                        <div fxFlex="20%" fxLayoutAlign="start center">
+                            <mat-icon *ngIf="ingreso.aprobado==false && item.cantidad>1" color="warn"
+                                (click)="restar(item)" style="cursor: pointer" matTooltip="Restar -1">
+                                remove_circle
+                            </mat-icon>
+                        </div>
+                        <div fxFlex="60%" fxLayoutAlign="center center">
+                            <b style="font-size: 20px;">{{item.cantidad}}</b>
+                            <span *ngIf="ingreso && ingreso.aprobado"> / {{item.cantidadSaldo}}</span>
+                        </div>
+                        <div fxFlex="20%" fxLayoutAlign="end center">
+                            <mat-icon *ngIf="ingreso.aprobado==false" color="accent" (click)="sumar(item)"
+                                style="cursor: pointer" matTooltip="Sumar +1">
+                                add_circle
+                            </mat-icon>
+                        </div>
+                    </div>
+                </td>
+                <td data-column="SUBTOTAL" style="text-align: right;"><b>{{item.subTotal | number:'1.2-2'}}</b></td>
+                <td data-column="OPCIONES">
+                    <mat-icon *ngIf="item.cantidadSaldo>0" color="primary" (click)="editarDetalle(item)"
+                        style="cursor: pointer" matTooltip="Editar Detalle">
+                        edit
+                    </mat-icon>
+                    <mat-icon *ngIf="item.aprobado==false && item.eliminar" color="warn" (click)="eliminarItem(item)"
+                        style="cursor: pointer" matTooltip="Eliminar Item del Detalle">
+                        delete
+                    </mat-icon>
+                </td>
+            </tr>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="6">Sucursal: <b *ngIf="ingresoRelacionado">{{ingresoRelacionado.Sucursal.descripcion}},
+                        {{ingresoRelacionado.Almacen.descripcion}}</b></th>
+                <th>Total</th>
+                <th style="text-align: right; font-size: 25px;">{{total | number:'1.2-2'}}</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="20%">
+        <button *ngIf="ingreso && ingreso.aprobado" mat-raised-button (click)="descargar()" color="primary">
+            <mat-icon>print</mat-icon> Imprimir Ingreso
+        </button>
+
+
+        <button mat-raised-button (click)="descargar()" color="primary">
+            <mat-icon>print</mat-icon> Imprimir 1
+        </button>
+
+        <button mat-raised-button (click)="imprimir()" color="primary">
+            <mat-icon>print</mat-icon> Imprimir 2
+        </button>
+    </div>
+    <div fxFlex="60%">
+        <span>Se podra aprobar este Ingreso si el total es mayor a 0</span>
+    </div>
+    <div fxFlex="20%" fxLayoutAlign="end center">
+        <button *ngIf="ingreso && ingreso.activo && ingreso.aprobado==false" [disabled]="total==0" mat-raised-button
+            color="warn" (click)="aprobar()">
+            <mat-icon>done_all</mat-icon> Aprobar Ingreso
+        </button>
+    </div>
+</div>
+
+
+<span>Copiar este ingreso:</span>
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="60%">
+        <ng-select placeholder="Selecciona un Ingreso" (change)="copiarIngreso($event)" class="w-100"
+            [clearable]="false">
+            <ng-option *ngFor="let item of ingresosNoAprobados" [value]="item._id">
+                <span>
+                    {{item.codigo}} - {{item.descripcion}}
+                </span>
+            </ng-option>
+        </ng-select>
+    </div>
+    <div fxFlex="40%" fxLayoutAlign="end center">
+
+    </div>
+</div>

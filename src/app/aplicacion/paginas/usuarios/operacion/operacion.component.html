@@ -1,0 +1,32 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row" fxLayoutAlign="star">
+            <button mat-button>
+                <mat-icon color="primary">lock_open</mat-icon>
+                Operaciones
+            </button>
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="primary" (click)="crearTodo()" style="cursor: pointer" matTooltip="Actualizar Operaciones">
+                add
+            </mat-icon>
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+
+<!-- CUERPO -->
+<div mat-dialog-content>
+
+    <ul>
+        <li *ngFor="let item of operaciones">
+            {{item.title}}
+        </li>
+    </ul>
+</div>

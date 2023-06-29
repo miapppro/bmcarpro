@@ -1,0 +1,63 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">lock</mat-icon>
+            Actualizar Clave
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+
+<!-- FORM -->
+<form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="onSubmit()">
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Clave actual</mat-label>
+            <input matInput autocomplete="off" placeholder="Password actual" formControlName="passwordActual"
+                type="password" [required]="true">
+            <mat-icon matSuffix>lock_open</mat-icon>
+            <mat-error *ngIf="registroControl && r.passwordActual.errors">
+                <mat-error *ngIf="r.passwordActual.errors.required">
+                    Se requiere la clave actual
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Clave nueva</mat-label>
+            <input matInput autocomplete="off" placeholder="Password nueva" formControlName="passwordNuevo"
+                type="password" [required]="true">
+            <mat-icon matSuffix>vpn_key</mat-icon>
+            <mat-error *ngIf="registroControl && r.passwordNuevo.errors">
+                <mat-error *ngIf="r.passwordNuevo.errors.required">
+                    Se requiere la clave nueva
+                </mat-error>
+                <mat-error *ngIf="r.passwordNuevo.errors.minlength">
+                    Debe tener al menos 6 caracteres
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- PIE -->
+    <div mat-dialog-actions>
+        <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+            <mat-icon>done</mat-icon>Actualizar
+        </button>
+    </div>
+
+</form>

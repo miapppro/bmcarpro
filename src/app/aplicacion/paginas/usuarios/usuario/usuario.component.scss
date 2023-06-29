@@ -1,0 +1,22 @@
+table {
+    width: 100%;
+}
+
+.tabla-contenedor {
+    height: 500px;
+    overflow: auto;
+}
+
+.mat-row:hover {
+    background-color: rgba(224, 234, 235, 0.911);
+    cursor: pointer;
+}
+
+@media all and (max-width: 700px) {
+    .letra {
+        font-size: 9px;
+    }
+    .codigo {
+        font-size: 10px;
+    }
+}

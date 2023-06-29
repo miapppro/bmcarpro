@@ -1,0 +1,23 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+    <div fxLayout="row">
+        Descargar: Egreso: &nbsp; <b *ngIf="egreso">{{egreso.codigo}}</b>
+    </div>
+    <div fxLayout="row"></div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+            indeterminate_check_box
+        </mat-icon>
+    </div>
+</div>
+
+<!-- CUERPO -->
+<div mat-dialog-content>
+    <div style="text-align: center;">
+        <div>
+            <button cdkFocusInitial mat-raised-button color="primary" matTooltip="Descargar"
+                (click)="descargar()">
+                <mat-icon>print</mat-icon> Imprimir Egreso
+            </button>
+        </div>
+    </div>
+</div>

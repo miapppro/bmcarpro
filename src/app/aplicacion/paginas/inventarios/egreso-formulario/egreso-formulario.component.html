@@ -1,0 +1,78 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">{{ data.nuevo? 'add':'edit'}}</mat-icon>
+            Egreso
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<!-- FORM -->
+<form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="onSubmit()">
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <ng-select [items]="sucursales" bindLabel="descripcion" bindValue="_id" placeholder="Selecciona Sucursal"
+            appendTo="body" formControlName="Sucursal" (change)="cambiarSucursal(false)">
+        </ng-select>
+        <mat-error *ngIf="registroControl && r.Sucursal.errors">
+            <mat-error *ngIf="r.Sucursal.errors.required">
+                Se requiere una Sucursal!
+            </mat-error>
+        </mat-error>
+
+        <ng-select [items]="almacenes" bindLabel="descripcion" bindValue="_id" placeholder="Selecciona Almacen"
+            appendTo="body" formControlName="Almacen">
+        </ng-select>
+        <mat-error *ngIf="registroControl && r.Almacen.errors">
+            <mat-error *ngIf="r.Almacen.errors.required">
+                Se requiere un Almacen!
+            </mat-error>
+        </mat-error>
+
+        <ng-select [items]="conceptos" bindLabel="descripcion" bindValue="id" placeholder="Selecciona Concepto"
+            appendTo="body" formControlName="concepto">
+        </ng-select>
+        <mat-error *ngIf="registroControl && r.concepto.errors">
+            <mat-error *ngIf="r.concepto.errors.required">
+                Se requiere un Concepto!
+            </mat-error>
+        </mat-error>
+
+        <!--  (blur)="buscarDescripcion()" -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Descripcion</mat-label>
+            <input matInput autocomplete="off" placeholder="Descripcion" formControlName="descripcion" type="text"
+                [required]="true">
+            <mat-icon matSuffix>description</mat-icon>
+            <mat-error *ngIf="registroControl && r.descripcion.errors">
+                <mat-error *ngIf="r.descripcion.errors.required">
+                    Se requiere la descripcion
+                </mat-error>
+                <mat-error *ngIf="r.descripcion.errors.minlength">
+                    Debe tener al menos 3 caracteres
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- PIE -->
+    <div mat-dialog-actions>
+        <button cdkFocusInitial type="submit" mat-raised-button color="warn" [disabled]="boton">
+            <mat-icon>done</mat-icon> {{ data.nuevo? 'Registrar!':'Actualizar!'}}
+        </button>
+    </div>
+
+</form>

@@ -1,0 +1,76 @@
+<!-- TITULO -->
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="40%">
+        <button mat-button>
+            <mat-icon>toc</mat-icon> Detalle de Arqueo por Venta
+        </button>
+    </div>
+    <div fxFlex="60%">
+        <form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="cambiar()">
+            <ng-select placeholder="Selecciona un Arqueo" (change)="cambiar()" formControlName="idArqueo"
+                [required]="true" class="w-100" [clearable]="false">
+                <ng-option *ngFor="let item of arqueos" [value]="item._id">
+                    <span>
+                        {{item.codigo}} - {{item.numero}} : {{item.descripcion}}
+                    </span>
+                </ng-option>
+            </ng-select>
+        </form>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div id="print-section" *ngIf="arqueoSeleccionado">
+    <table class="w-100">
+        <thead>
+            <tr>
+                <th>{{arqueoSeleccionado.codigo}}</th>
+                <th colspan="4" style="text-align: center;">ARQUEO POR VENTA</th>
+            </tr>
+            <tr>
+                <th>{{arqueoSeleccionado.numero}}</th>
+                <th colspan="4">{{arqueoSeleccionado.Sucursal.descripcion}}</th>
+            </tr>
+            <tr>
+                <th>Nº</th>
+                <th>Efectivo Codigo</th>
+                <th>Venta Codigo</th>
+                <th>Venta Descripcion</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of cajaContados ; index as i">
+                <td data-column="Nº">{{i+1}}</td>
+                <td>{{item.codigo}}</td>
+                <td>{{item.Venta.codigo}}</td>
+                <td>{{item.Venta.descripcion}}</td>
+                <td style="text-align: right;">{{item.monto | number:'1.2-2'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="4">Total al Contado</th>
+                <th style="text-align: right; font-size: 25px;">{{totalContado | number:'1.2-2'}}</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<mat-divider></mat-divider>
+
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+    <div fxFlex="10%">
+        <button mat-raised-button styleSheetFile="/assets/css/arqueo-venta.scss" printSectionId="print-section"
+            color="primary" ngxPrint>
+            <mat-icon>print</mat-icon> Imprimir
+        </button>
+    </div>
+    <div fxFlex="70%">
+
+    </div>
+    <div fxFlex="20%" fxLayoutAlign="end center">
+
+    </div>
+</div>

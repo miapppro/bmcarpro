@@ -1,0 +1,174 @@
+<!-- TITULO -->
+<div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+    <div fxLayout="row">
+        <button mat-button>
+            <mat-icon>monetization_on</mat-icon> Arqueos
+        </button>
+    </div>
+    <div fxLayout="row"></div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <button mat-mini-fab (click)="nuevo()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<!-- FORM -->
+<form *ngIf="buscadorFormGroup" [formGroup]="buscadorFormGroup" (ngSubmit)="buscar()" #aForm>
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+        <div fxFlex="30%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>search</mat-icon> Buscar
+                </mat-label>
+                <input matInput autocomplete="off" placeholder="Buscar..." name="buscador" formControlName="buscador"
+                    type="text">
+            </mat-form-field>
+        </div>
+
+        <div fxFlex="20%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>reorder</mat-icon> Limite
+                </mat-label>
+                <input matInput placeholder="Limite" formControlName="limite" type="number">
+            </mat-form-field>
+        </div>
+        <div fxFlex="20%">
+            <ng-select placeholder="Selecciona una Sucursal" formControlName="sucursal" class="w-100"
+                [clearable]="false" (change)="buscar()">
+                <ng-option [value]="0">
+                    TODOS
+                </ng-option>
+                <ng-option *ngFor="let item of sucursales" [value]="item._id">
+                    {{item.codigo}} - {{item.descripcion}}
+                </ng-option>
+            </ng-select>
+        </div>
+        <div fxFlex="20%">
+            <mat-form-field>
+                <mat-label>
+                    <mat-icon>search</mat-icon> Buscar
+                </mat-label>
+                <input type="search" matInput (keyup)="aplicarFiltro($event)" placeholder="buscar..">
+            </mat-form-field>
+        </div>
+        <div fxFlex="10%" fxLayoutAlign="end center">
+            <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+                <mat-icon>search</mat-icon> Buscar
+            </button>
+        </div>
+    </div>
+</form>
+
+
+<mat-divider></mat-divider>
+
+<!-- TABLA -->
+<div class="tabla-contenedor mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort class="w-100">
+
+        <!--  -->
+        <ng-container matColumnDef="codigo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">CODIGO</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon color="{{element.activo? 'primary' : 'warn'}}" matTooltip="Cerrar">
+                    {{element.activo? 'done' : 'close'}}
+                </mat-icon>
+                {{element.codigo}}
+            </td>
+        </ng-container>
+
+        <!--  -->
+        <ng-container matColumnDef="numero">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%">NUMERO</th>
+            <td mat-cell *matCellDef="let element">
+               <b>{{element.numero}}</b>  <br>
+                {{element.Sucursal.descripcion}}
+            </td>
+        </ng-container>
+
+        <!--  -->
+        <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 50%">DESCRIPCION</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.descripcion}} <br>
+                {{element.inicioOficial | date:'EEEE dd LLLL yyyy hh:mm:ss'}} - {{element.finOficial | date:'EEEE dd LLLL yyyy hh:mm:ss'}}
+            </td>
+        </ng-container>
+
+        <!--  -->
+        <ng-container matColumnDef="aprobado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">APROBADO</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon color="{{element.aprobado? 'primary' : 'warn'}}" matTooltip="Cerrar">
+                    {{element.aprobado? 'done' : 'close'}}
+                </mat-icon>
+            </td>
+        </ng-container>
+
+        <!-- OPCIONES -->
+        <ng-container matColumnDef="opciones">
+            <th mat-header-cell *matHeaderCellDef style="width: 20%; text-align: right;">OPCIONES</th>
+            <td mat-cell *matCellDef="let element" style="text-align: right;">
+
+                <!-- 
+                <button mat-icon-button (click)="detalle(element)" matTooltip="Detalle Persona">
+                    <mat-icon color="primary">info</mat-icon>
+                </button>
+                -->
+
+                <button mat-icon-button [matMenuTriggerFor]="menu" color="primany" matTooltip="Opciones">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #menu="matMenu">
+                    <div style="text-align: center;">
+                        <div>
+                            <b>{{element.descripcion}}</b>
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item [routerLink]="['/cajas/arqueo/detalle/' + element._id]"
+                        matTooltip="Arqueo Detalle">
+                        <mat-icon color="primary">info</mat-icon> Detalle Oficial
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item [routerLink]="['/cajas/arqueo/venta/' + element._id]"
+                        matTooltip="Arqueo por Venta">
+                        <mat-icon color="primary">info</mat-icon> Detalle x Venta 
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item [routerLink]="['/cajas/arqueo/producto/' + element._id]"
+                        matTooltip="Arqueo por Producto">
+                        <mat-icon color="primary">info</mat-icon> Detalle x Producto
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item (click)="editar(element)" matTooltip="Editar">
+                        <mat-icon>edit</mat-icon> Editar
+                    </button>
+                    <mat-divider></mat-divider>
+                    <!-- 
+                    <button *ngIf="element.eliminar" mat-menu-item (click)="eliminar(element)" matTooltip="Eliminar">
+                        <mat-icon>delete</mat-icon> Eliminar
+                    </button>
+                     -->
+                </mat-menu>
+
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (dblclick)="detalle(row)"
+            (mouseenter)="row.isActive=true" (mouseleave)="row.isActive=false">
+        </tr>
+    </table>
+
+</div>
+
+<!-- PAGINADOR-->
+<mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 30, 40, 50, 100, 200]" showFirstLastButtons
+    class="mat-elevation-z8">
+</mat-paginator>

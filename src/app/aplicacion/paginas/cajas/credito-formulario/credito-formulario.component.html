@@ -1,0 +1,181 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">{{ data.nuevo? 'add':'edit'}}</mat-icon>
+            Cobrar Credito
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<!-- FORM -->
+<form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="onSubmit()" #aForm>
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <fieldset>
+            <legend>Arqueo</legend>
+            <div *ngIf="arqueo" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="20%">
+                    <fieldset>
+                        <legend>Codigo</legend>
+                        {{arqueo.codigo}}
+                    </fieldset>
+                </div>
+                <div fxFlex="40%">
+                    <fieldset>
+                        <legend>Sucursal</legend>
+                        {{arqueo.Sucursal.descripcion}}
+                    </fieldset>
+                </div>
+                <div fxFlex="40%">
+                    <fieldset>
+                        <legend>Almacen</legend>
+                        {{arqueo.Almacen.descripcion}}
+                    </fieldset>
+                </div>
+            </div>
+        </fieldset>
+
+        <mat-error *ngIf="registroControl && r.Arqueo.errors">
+            <mat-error *ngIf="r.Arqueo.errors.required">
+                Aperture una instancia o un periodo de Arqueo
+            </mat-error>
+        </mat-error>
+
+        <fieldset>
+            <legend>Venta</legend>
+            <div *ngIf="venta" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="20%">
+                    <fieldset>
+                        <legend>Codigo</legend>
+                        {{venta.codigo}}
+                    </fieldset>
+                </div>
+                <div fxFlex="40%">
+                    <fieldset>
+                        <legend>Sucursal</legend>
+                        {{venta.Sucursal.descripcion}}
+                    </fieldset>
+                </div>
+                <div fxFlex="40%">
+                    <fieldset>
+                        <legend>Almacen</legend>
+                        {{venta.Almacen.descripcion}}
+                    </fieldset>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Estado de cuenta</legend>
+            <div *ngIf="venta" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="33%">
+                    <fieldset>
+                        <legend>Total</legend>
+                        {{venta.total | number:'1.2-2'}}
+                    </fieldset>
+                </div>
+                <div fxFlex="33%">
+                    <fieldset>
+                        <legend>Total a Cuenta</legend>
+                        {{venta.totalCuenta | number:'1.2-2'}}
+                    </fieldset>
+                </div>
+                <div fxFlex="33%">
+                    <fieldset>
+                        <legend>Saldo</legend>
+                        {{venta.totalSaldo | number:'1.2-2'}}
+                    </fieldset>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>EFECTIVO</legend>
+            <div *ngIf="venta" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="50%">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Efectivo</mat-label>
+                        <input matInput name="efectivo" placeholder="efectivo" formControlName="efectivo" type="text"
+                            [required]="true" (keyup)="calcular()">
+                        <mat-icon matSuffix>request_quote</mat-icon>
+                        <mat-error *ngIf="registroControl && r.efectivo.errors">
+                            <mat-error *ngIf="r.efectivo.errors.required">
+                                Se requiere el Efectivo
+                            </mat-error>
+                            <mat-error *ngIf="r.efectivo.errors.min">
+                                Debe ser mayor o igual al monto
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="50%">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Monto</mat-label>
+                        <input matInput placeholder="monto" formControlName="monto" type="text">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div *ngIf="venta" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+                <div fxFlex="50%">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Acumulado</mat-label>
+                        <input matInput placeholder="monto Acumulado" formControlName="montoAcumulado" type="text">
+                    </mat-form-field>
+                </div>
+                <div fxFlex="50%">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Saldo</mat-label>
+                        <input matInput placeholder="monto Saldo" formControlName="montoSaldo" type="text">
+                    </mat-form-field>
+                </div>
+            </div>
+        </fieldset>
+
+
+
+
+
+        <p>
+            Cambio: <span style="font-size: 30px; color: rgb(56, 161, 7);">{{r.cambio.value}}</span>
+        </p>
+
+        <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+            <div fxFlex="50%">
+
+            </div>
+            <div fxFlex="50%">
+
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+            <div fxFlex="50%">
+
+            </div>
+            <div fxFlex="50%">
+
+            </div>
+        </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- PIE -->
+    <div mat-dialog-actions>
+        <button type="submit" mat-raised-button color="warn">
+            <mat-icon>done</mat-icon> {{ data.nuevo? 'Registrar!':'Actualizar!'}}
+        </button>
+    </div>
+
+</form>

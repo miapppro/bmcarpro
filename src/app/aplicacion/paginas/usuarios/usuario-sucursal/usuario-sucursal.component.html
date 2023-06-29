@@ -1,0 +1,55 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row" fxLayoutAlign="star">
+            <mat-icon color="primary">pivot_table_chart</mat-icon>
+            Sucursal de: <span *ngIf="usuario">{{usuario.usuario}}</span>
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<!-- FORM -->
+<form *ngIf="formRegistro" [formGroup]="formRegistro" (ngSubmit)="onSubmit()">
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <ng-select [items]="sucursales" bindLabel="descripcion" bindValue="_id" placeholder="Selecciona Sucursal"
+            appendTo="body" formControlName="Sucursal" (change)="cambiarSucursal(false)">
+        </ng-select>
+        <mat-error *ngIf="submittedR && r.Sucursal.errors">
+            <mat-error *ngIf="r.Sucursal.errors.required">
+                Se requiere una Sucursal!
+            </mat-error>
+        </mat-error>
+
+        <ng-select [items]="almacenes" bindLabel="descripcion" bindValue="_id" placeholder="Selecciona Almacen"
+            appendTo="body" formControlName="Almacen">
+        </ng-select>
+        <mat-error *ngIf="submittedR && r.Almacen.errors">
+            <mat-error *ngIf="r.Almacen.errors.required">
+                Se requiere un Almacen!
+            </mat-error>
+        </mat-error>
+
+    </div>
+
+    <!-- PIE -->
+    <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center" class="flex-p margen">
+        <div fxLayout="row"> </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+                <mat-icon>done</mat-icon> Aceptar
+            </button>
+        </div>
+    </div>
+
+</form>

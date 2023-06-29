@@ -1,0 +1,14 @@
+<div id="app" class="app" [dir]="(settings.rtl) ? 'rtl' : 'ltr'" [ngClass]="settings.theme"
+    [class.fixed-header]="settings.fixedHeader" [class.horizontal-menu]="settings.menu == 'horizontal'"
+    [class.compact]="settings.menuType == 'compact'" [class.mini]="settings.menuType == 'mini'">
+
+    <ngx-spinner bdOpacity=0 bdColor="rgba(0,0,0,0.3)" size="large" color="#fff" type="ball-scale-multiple"
+        [fullScreen]="true">
+        <p style="margin-top: -20px; font-size: 20px; color: white">Cargando...</p>
+    </ngx-spinner>
+    <router-outlet></router-outlet>
+    <div id="app-spinner" [class.hide]="!settings.loadingSpinner">
+        <mat-spinner color="primary"></mat-spinner>
+        <h4>Cargando...</h4>
+    </div>
+</div>

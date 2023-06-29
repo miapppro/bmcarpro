@@ -1,0 +1,70 @@
+<button mat-icon-button [matMenuTriggerFor]="appsMenu" #appsMenuTrigger="matMenuTrigger">
+  <mat-icon>apps</mat-icon>
+</button>
+<mat-menu #appsMenu="matMenu" [overlapTrigger]="false" class="toolbar-dropdown-menu applications">
+  <span (mouseleave)="appsMenuTrigger.closeMenu()">
+    <mat-toolbar color="primary">
+      <div fxLayout="row" fxLayoutAlign="space-around center" class="header">
+        Aplicaciones
+      </div>
+    </mat-toolbar>
+    <mat-card>
+      <mat-grid-list cols="3" rowHeight="1:1">
+        <mat-grid-tile>
+          <button mat-button>
+            <mat-icon class="muted-text">person</mat-icon>
+            <span>Mi cuenta</span>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-button>
+            <mat-icon class="muted-text">search</mat-icon>
+            <span>buscar</span>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-button>
+            <mat-icon class="muted-text">play_arrow</mat-icon>
+            <span>Musica</span>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-button >
+            <mat-icon class="muted-text">settings</mat-icon>
+            <span>Configuracion</span>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-button>
+            <mat-icon class="muted-text">event</mat-icon>
+            <span>Calendario</span>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-button>
+            <mat-icon class="muted-text">image</mat-icon>
+            <span>Galeria</span>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-button>
+            <mat-icon class="muted-text">library_books</mat-icon>
+            <span>Documentos</span>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-button routerLink="/ajustes/precio">
+            <mat-icon class="muted-text">local_gas_station</mat-icon>
+            <span>Precios</span>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-button routerLink="/ajustes/cambio">
+            <mat-icon class="muted-text">monetization_on</mat-icon>
+            <span>T/Cambio </span>
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card>
+  </span>
+</mat-menu>

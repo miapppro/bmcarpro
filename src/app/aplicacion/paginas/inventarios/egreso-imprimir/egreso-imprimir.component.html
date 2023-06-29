@@ -1,0 +1,64 @@
+<!-- CUERPO -->
+<div mat-dialog-content>
+    <div id="print-section" *ngIf="datos">
+
+        <table *ngIf="datos && detalle">
+            <thead>
+                <tr>
+                    <th colspan="2">miTiendaPRO</th>
+                    <th colspan="4">
+                        <p style="font-size: 25px;">EGRESO</p>
+                    </th>
+                    <th>
+                        <p>{{datos.registro | date}}</p>
+                        <p style="font-size: 30px;">
+                            {{datos.codigo}}
+                        </p>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="4">
+                        {{datos.Sucursal.descripcion}} - {{datos.Almacen.descripcion}}
+                    </th>
+                    <th colspan="3"> <b>{{datos.aprobado?'APROBADO':'BORRADOR'}}</b></th>
+                </tr>
+                <tr>
+                    <th style="width: 5%;">Nº</th>
+                    <th style="width: 30%;">PRODUCTO</th>
+                    <th style="width: 20%;">CODIGO PRO.</th>
+                    <th style="width: 10%;">BARRA</th>
+                    <th style="width: 10%;">PV</th>
+                    <th style="width: 10%;">CANTIDAD</th>
+                    <th style="width: 15%;">SUBTOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of detalle ; index as i">
+                    <td data-column="Nº">{{i+1}}</td>
+                    <td style="text-align: left;">{{item.Producto.codigo}} -
+                        {{item.Producto.descripcion}}</td>
+                    <td style="text-align: left;">
+                        {{item.Producto.codigoProveedor}}
+                    </td>
+                    <td>{{item.codigoBarra}}</td>
+                    <td style="text-align: end;">{{item.precioVenta | number:'1.2-2'}}</td>
+                    <td style="text-align: center;">
+                        {{item.cantidad}}
+                    </td>
+                    <td style="text-align: right;"><b>{{item.subTotal | number:'1.2-2'}}</b></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="6">TOTAL</th>
+                    <th style="text-align: right; font-size: 25px;">{{datos.total | number:'1.2-2'}}</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<button mat-raised-button styleSheetFile="/assets/css/egreso.scss" printSectionId="print-section" color="primary"
+    ngxPrint>
+    <mat-icon>print</mat-icon> Imprimir
+</button>

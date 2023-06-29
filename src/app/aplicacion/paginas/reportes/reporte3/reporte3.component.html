@@ -1,0 +1,79 @@
+<p>STOCK</p>
+<!-- FORM -->
+<form *ngIf="buscadorFormGroup" [formGroup]="buscadorFormGroup" (ngSubmit)="obtenerRelacionadoConsulta()" #aForm>
+
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+        <div fxFlex="20%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>search</mat-icon> Buscar
+                </mat-label>
+                <input matInput autocomplete="off" placeholder="Buscar..." name="buscador" formControlName="buscador"
+                    type="text">
+            </mat-form-field>
+        </div>
+        <div fxFlex="20%">
+
+        </div>
+        <div fxFlex="20%">
+
+        </div>
+        <div fxFlex="20%">
+
+        </div>
+        <div fxFlex="10%">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>
+                    <mat-icon>reorder</mat-icon> Limite
+                </mat-label>
+                <input matInput placeholder="Limite" formControlName="limite" type="number">
+            </mat-form-field>
+        </div>
+
+        <div fxFlex="10%" fxLayoutAlign="end center">
+            <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+    </div>
+</form>
+<table class="w-100">
+    <thead>
+        <tr>
+            <th>CODIGO</th>
+            <th>CODIGO PRO.</th>
+            <th>DESCRIPCION</th>
+            <th>STOCK</th>
+            <th>PV P.</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of productos">
+            <td>{{item.Producto.codigo}}</td>
+            <td>
+                {{item.Producto.codigoProveedor}} <br>
+              <span style="font-size: 10px;">{{item.Producto.codigoBarra}}</span>  
+            </td>
+            <td>
+                {{item.Producto.descripcion}}<br>
+                <span style="font-size: 10px;">({{item.cantidadIngreso}})</span>  
+                
+            </td>
+            <td>
+             {{item.totalStock}} de {{item.total}}
+            </td>
+            <td>{{item.pv}}</td>
+            <td>
+                <button mat-icon-button (click)="editar(item)" matTooltip="Detalle Persona">
+                    <mat-icon color="primary">edit</mat-icon>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<button (click)="exportar()" mat-raised-button color="accent">
+    <mat-icon>get_app</mat-icon> Exportar a Excel
+</button>

@@ -1,0 +1,158 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">edit</mat-icon>
+            Detalle de Compra
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<!-- FORM -->
+<form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="onSubmit()">
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <div *ngIf="detalle" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+            <div fxFlex="50%">
+                Cantidad Ingreso: {{detalle.cantidadIngresoSaldo}}
+            </div>
+            <div fxFlex="50%">
+
+            </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>CANTIDAD</mat-label>
+            <input matInput autocomplete="off" placeholder="Cantidad" formControlName="cantidad" type="number"
+                [required]="true">
+            <mat-icon matSuffix>iso</mat-icon>
+            <mat-error *ngIf="registroControl && r.cantidad.errors">
+                <mat-error *ngIf="r.cantidad.errors.required">
+                    Se requiere la cantidad
+                </mat-error>
+                <mat-error *ngIf="r.cantidad.errors.min">
+                    La cantidad minima debera ser: 1
+                </mat-error>
+                <mat-error *ngIf="r.cantidad.errors.max">
+                    La cantidad maxima debera ser: {{detalle.cantidadIngresoSaldo}}
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <div *ngIf="detalle" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+            <div fxFlex="50%">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>PRECIO DE COMPRA OFICIAL</mat-label>
+                    <input matInput placeholder="precio compra" formControlName="precioCompraOficial" type="number"
+                        [required]="true">
+                    <mat-icon matSuffix>attach_money</mat-icon>
+                    <mat-error *ngIf="registroControl && r.precioCompraOficial.errors">
+                        <mat-error *ngIf="r.precioCompraOficial.errors.required">
+                            Se requiere el precio de compra oficial
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="50%">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>PRECIO DE COMPRA PROMEDIO</mat-label>
+                    <input matInput placeholder="precio compra" formControlName="precioCompraPromedio" type="number"
+                        [required]="true">
+                    <mat-icon matSuffix>attach_money</mat-icon>
+                    <mat-error *ngIf="registroControl && r.precioCompraPromedio.errors">
+                        <mat-error *ngIf="r.precioCompraPromedio.errors.required">
+                            Se requiere el precio de compra promedio
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div *ngIf="detalle" fxLayout="row" fxLayoutAlign="space-around" fxLayout.xs="column" fxLayoutGap="0.2%">
+            <div fxFlex="50%">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>PRECIO DE COMPRA</mat-label>
+                    <input matInput placeholder="precio compra" formControlName="precioCompra" type="number"
+                        [required]="true">
+                    <mat-icon matSuffix>attach_money</mat-icon>
+                    <mat-error *ngIf="registroControl && r.precioCompra.errors">
+                        <mat-error *ngIf="r.precioCompra.errors.required">
+                            Se requiere el precio de compra
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="50%">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>PRECIO DE VENTA</mat-label>
+                    <input matInput placeholder="precioVenta" formControlName="precioVenta" type="number"
+                        [required]="true">
+                    <mat-icon matSuffix>attach_money</mat-icon>
+                    <mat-error *ngIf="registroControl && r.precioVenta.errors">
+                        <mat-error *ngIf="r.precioVenta.errors.required">
+                            Se requiere el precio de venta
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+
+
+
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>LOTE</mat-label>
+            <input matInput autocomplete="off" placeholder="Lote" formControlName="lote" [required]="true">
+            <mat-icon matSuffix>verified</mat-icon>
+            <mat-error *ngIf="registroControl && r.lote.errors">
+                <mat-error *ngIf="r.lote.errors.required">
+                    Se requiere el numero de Lote
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>LOTE FECHA</mat-label>
+            <input matInput type="date" placeholder="Fecha de Vencimiento" formControlName="loteFecha"
+                [required]="true">
+            <mat-error *ngIf="registroControl && r.loteFecha.errors">
+                <mat-error *ngIf="r.loteFecha.errors.required">
+                    Se requiere la fecha de Vencimiento
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>CODIGO DE BARRA</mat-label>
+            <input matInput autocomplete="off" placeholder="Codigo de Barra" formControlName="codigoBarra"
+                [required]="true">
+            <mat-icon matSuffix>view_column</mat-icon>
+            <mat-error *ngIf="registroControl && r.codigoBarra.errors">
+                <mat-error *ngIf="r.codigoBarra.errors.required">
+                    Se requiere el codigo de barra
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- PIE -->
+    <div mat-dialog-actions>
+        <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+            <mat-icon>done</mat-icon> Actualizar
+        </button>
+    </div>
+
+</form>

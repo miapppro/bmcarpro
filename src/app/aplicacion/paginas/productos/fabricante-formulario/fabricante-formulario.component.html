@@ -1,0 +1,51 @@
+<!-- TITULO -->
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+        <div fxLayout="row">
+            <mat-icon color="primary">{{ data.nuevo? 'add':'edit'}}</mat-icon>
+            {{ data.nuevo? 'Nueva':'Editar'}} - Fabricante
+        </div>
+        <div fxLayout="row"></div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-icon color="warn" (click)="onNoClick()" style="cursor: pointer" matTooltip="Cerrar">
+                backspace
+            </mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<!-- FORM -->
+<form *ngIf="registroFormGroup" [formGroup]="registroFormGroup" (ngSubmit)="onSubmit()">
+
+    <!-- CUERPO -->
+    <div mat-dialog-content>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Descripcion</mat-label>
+            <input matInput autocomplete="off" placeholder="Descripcion" formControlName="descripcion"
+                type="text" [required]="true">
+            <mat-icon matSuffix>account_circle</mat-icon>
+            <mat-error *ngIf="registroControl && r.descripcion.errors">
+                <mat-error *ngIf="r.descripcion.errors.required">
+                    Se requiere la descripcion
+                </mat-error>
+                <mat-error *ngIf="r.descripcion.errors.minlength">
+                    Debe tener al menos 3 caracteres
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- PIE -->
+    <div mat-dialog-actions>
+        <button cdkFocusInitial type="submit" mat-raised-button color="warn">
+            <mat-icon>done</mat-icon> {{ data.nuevo? 'Registrar!':'Actualizar!'}}
+        </button>
+    </div>
+
+</form>
+

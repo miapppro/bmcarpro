@@ -1,0 +1,22 @@
+<p>importar-PRODUCTO works!</p>
+
+
+<input type="file" (change)="onFileChange($event)" multiple="false" />
+<table class="sjs-table">
+    <tbody>
+        <tr *ngFor="let row of data">
+            <td *ngFor="let val of row">
+                {{val}}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<button (click)="cargar()">Cargar!</button>
+<button (click)="export()">Export!</button>
+
+<div *ngIf="datos" style="scroll-behavior: auto;">
+    {{datos | json}}
+</div>
+

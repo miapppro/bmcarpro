@@ -1,0 +1,28 @@
+<table>
+    <thead>
+        <tr>
+            <th>Concepto</th>
+            <th>Sucursal</th>
+            <th>Almacen</th>
+            <th>Egreso</th>
+            <th>Precio Compra</th>
+            <th>Precio Venta</th>
+            <th>Cantidad</th>
+            <th>Sub Total</th>
+            <th>Registro</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of egresos">
+            <td>{{item.venta? 'VENTA':'EGRESO'}}</td>
+            <td>{{item.Sucursal.descripcion}}</td>
+            <td>{{item.Almacen.descripcion}}</td>
+            <td>{{item.Egreso.codigo}}</td>
+            <td>{{item.precioCompra}}</td>
+            <td>{{item.precioVenta}}</td>
+            <td>{{item.cantidad}} de {{item.cantidadIngresoSaldo}}</td>
+            <td>{{item.subTotal}}</td>
+            <td>{{item.registro | date:'EEEE dd LLLL yyyy hh:mm:ss a'}}</td>
+        </tr>
+    </tbody>
+</table>
